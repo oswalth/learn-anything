@@ -86,10 +86,11 @@ Work through these in order. Detailed questions live in the interview script.
 - Use `assets/CLAUDE.md`, `assets/BASELINE.md`, `assets/ENVIRONMENT.md`, and
   `assets/roadmap.md` as templates. Fill every placeholder; delete none of the required
   sections.
-- The topic `CLAUDE.md` records the **plugin dependency**: repo URL
-  `github.com/oswalth/learn-anything` and the minimum plugin version (the current version in
-  `.claude-plugin/plugin.json`). It carries **no conventions text** — those live in the
-  plugin.
+- The topic `CLAUDE.md` records the **plugin dependency**: the marketplace repo
+  `oswalth/learn-anything`, the restore commands (`/plugin marketplace add …` +
+  `/plugin install learn-anything@learn-anything`), and the minimum plugin version (the
+  current version in `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`). It carries **no
+  conventions text** — those live in the plugin.
 - Copy the "Keep this file honest" changelog block verbatim into `CLAUDE.md`.
 
 ## When you finish (post-approval)

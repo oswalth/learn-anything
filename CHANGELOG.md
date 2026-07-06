@@ -14,6 +14,25 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.5.2] — 2026-07-06
+
+Made the plugin actually installable and documented the full lifecycle (patch — packaging +
+docs; no command/behavior change).
+
+- **Added `.claude-plugin/marketplace.json`** — a marketplace manifest listing the
+  `learn-anything` plugin (`source: "."`). Claude Code installs plugins *from a marketplace*,
+  not from a raw repo URL, so without this manifest `/plugin install …` failed with
+  "Marketplace not found". Install is now `/plugin marketplace add oswalth/learn-anything`
+  then `/plugin install learn-anything@learn-anything`.
+- **Rewrote `README.md`** into a no-questions-left guide: install (GitHub + local + CLI),
+  update (marketplace-cache vs installed-plugin mental model), manage/enable/disable/
+  uninstall, per-topic setup walkthrough, full command reference, restore-on-another-machine,
+  and a troubleshooting section (including the exact "Marketplace not found" error).
+- **Topic `CLAUDE.md` plugin-dependency section** (kickoff asset + skill) now records the
+  marketplace repo and the exact restore commands, not just a bare URL.
+- *Why:* the plugin was not installable as written, and install/update steps were wrong or
+  missing.
+
 ## [0.5.1] — 2026-07-06
 
 Made two advisory-only fields honest about what they guarantee (patch — wording fix plus one

@@ -60,10 +60,16 @@ Teach the new by contrast with what I already know deeply:
 
 ## Plugin dependency
 
-- **Plugin:** `learn-anything` — `github.com/oswalth/learn-anything`
+- **Plugin:** `learn-anything` — marketplace repo `oswalth/learn-anything`
 - **Minimum version:** {{X.Y.Z}} — the plugin version this topic was created against;
   `/author` and `/plan-module` warn if the installed plugin is older.
 - This repo is content-only. The plugin supplies all skills, agents, and conventions.
+- **To restore on another machine** (install the plugin, then open this directory):
+  ```text
+  /plugin marketplace add oswalth/learn-anything
+  /plugin install learn-anything@learn-anything
+  ```
+  Update later with `/plugin marketplace update learn-anything` then re-install.
 
 ## Decisions
 
