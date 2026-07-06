@@ -68,7 +68,9 @@ dir afterward.
   for existing topic repos.
 
 ## Step 8 — ship
-Commit. Remind the learner to **push** and to update the plugin on their other machines
+Commit, then tag the commit with an annotated git tag matching the new version:
+`git tag -a v<version> -m "<one-line changelog summary>"`. Remind the learner to **push
+both** — `git push && git push --tags` — and to update the plugin on their other machines
 (`/plugin`). If the change came from a topic's `/retro` brief, note the originating topic in
 the changelog entry.
 

@@ -14,6 +14,21 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.8.0] — 2026-07-06
+
+`/evolve`'s Step 8 (ship) now tags the commit with an annotated git tag matching the new
+version (`v<version>`) in addition to committing, so the plugin's version history is
+recoverable from `git tag` and not just from `CHANGELOG.md` prose (minor — new behavior,
+no topic-repo file format changes, so no migration needed).
+
+- **`skills/evolve/SKILL.md` Step 8.** After committing, run
+  `git tag -a v<version> -m "<one-line changelog summary>"`, then remind the learner to
+  push both the branch and the tag (`git push && git push --tags`).
+- **`README.md` §6.** Notes that shipping an `/evolve` change tags the commit and that the
+  push step now includes tags.
+- **No backfill.** The 6 versions already shipped (0.1.1 → 0.7.0) are left untagged by
+  design — this change only affects future ships.
+
 ## [0.7.0] — 2026-07-06
 
 Added `/study N.K`, a paced walkthrough command that interleaves a section's `theory.md`

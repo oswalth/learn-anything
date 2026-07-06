@@ -304,8 +304,9 @@ The system is designed to improve itself without quality decay:
 - **`/evolve`** (run inside this plugin's checkout) is a guarded workflow for changing the
   plugin itself: intent interview, minimal-scope loading, blast-radius impact check,
   diff review, a smoke test against a throwaway scratch topic, semver bump, and a
-  `CHANGELOG.md` entry. After shipping an `/evolve` change, push the plugin repo and
-  [update](#2-update-the-plugin) it on your other machines.
+  `CHANGELOG.md` entry. Shipping tags the commit `v<version>`. After shipping an `/evolve`
+  change, push the plugin repo and its tags and [update](#2-update-the-plugin) it on your
+  other machines.
 
 `/retro` and `/evolve` are the *only* sanctioned mutation paths. Both end in changelog
 entries, so the system's own history stays a first-class learning artifact.
