@@ -4,7 +4,8 @@ description: >-
   Reviews a drafted section for freshness — every version-sensitive claim checked against
   BASELINE.md and current web sources, catching things the model "remembered" that have
   since changed, and requiring "as of <date>" phrasing for volatile facts. Returns PASS or
-  a numbered objection list. One of the four parallel critics in the /author quorum.
+  a numbered objection list. One of the four parallel critics in the /author quorum; also
+  invoked stand-alone by /patch to verify a single flagged staleness correction.
 tools: Read, WebSearch, WebFetch
 model: opus
 ---
@@ -43,3 +44,9 @@ FAIL
 1. [file:location] <claim> — <what changed / source + date> → <fix or "as of" phrasing>
 2. ...
 ```
+
+## When invoked by /patch
+`/patch` invokes you outside the quorum to verify a single bounded staleness correction. Your
+prompt will name the edited passage — scope your PASS/FAIL verdict to *that passage only*. You
+may still mention other stale claims you notice while reading the file, but label them clearly
+as unprompted observations, not part of your verdict — `/patch` only acts on the scoped edit.

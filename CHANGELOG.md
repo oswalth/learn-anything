@@ -14,6 +14,35 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.9.0] — 2026-07-06
+
+Added `/patch N.K "note"`, an on-demand, bounded correction command — a learner who flags a
+wrong or outdated claim (or asks for more depth on one concept) mid-mentoring or mid-study gets
+it fixed and re-verified immediately, instead of only being caught by the critic quorum at
+`/author` time or waiting for a full regeneration (minor — new command, no topic-repo file
+format changes, so no migration needed). Originating topic: `learn-aws-ion`.
+
+- **New skill `skills/patch/SKILL.md`.** `disable-model-invocation: true` (it mutates section
+  content, matching the plugin's mutating-command pattern). Classifies the learner's flag as
+  **wrong** / **outdated** / **thin**, edits only the flagged passage directly with the Edit
+  tool (never invokes `section-drafter` — this stays a scalpel, not a redraft), then verifies
+  with exactly one matching critic (`critic-accuracy` / `critic-freshness` / `critic-depth`),
+  max 2 revise-and-reverify rounds. Never changes section/module status or touches
+  `workspace/`/`retention/` — `/check` alone owns mastery transitions.
+- **`agents/critic-accuracy.md`, `agents/critic-freshness.md`, `agents/critic-depth.md`.**
+  Descriptions now note they're also invoked stand-alone by `/patch`; each gained a short
+  "When invoked by /patch" section instructing the verdict to scope to the edited passage
+  named in the prompt, while unprompted observations about the rest of the file are surfaced
+  but non-blocking. `critic-pedagogy` is unchanged — `/patch`'s three flag types don't map to
+  it.
+- **`skills/mentor/SKILL.md`, `skills/study/SKILL.md`.** One guardrail line each: on a
+  wrong/outdated/thin flag, point the learner to `/patch N.K` rather than editing themselves —
+  both commands' no-edit identity is otherwise unchanged.
+- **`README.md`.** New `/patch` row in the command table; a sentence under "What makes the
+  content different" describing the post-authoring correction path; `study` and `patch` added
+  to §1's command list (the former was a pre-existing omission from the `/study` addition in
+  0.7.0, fixed here since the same line was already being edited).
+
 ## [0.8.0] — 2026-07-06
 
 `/evolve`'s Step 8 (ship) now tags the commit with an annotated git tag matching the new

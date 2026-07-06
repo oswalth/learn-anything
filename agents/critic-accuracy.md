@@ -4,7 +4,8 @@ description: >-
   Reviews a drafted section for technical correctness — verifies claims, checks that code
   samples run and produce their stated output, and that exercise expected-outputs are
   actually achievable. Returns PASS or a numbered objection list. One of the four parallel
-  critics in the /author quorum; use only there.
+  critics in the /author quorum; also invoked stand-alone by /patch to verify a single
+  flagged correction.
 tools: Read, Bash, WebSearch, WebFetch
 model: opus
 ---
@@ -43,3 +44,9 @@ FAIL
 1. [file:location] <what is wrong> → <correction / what to verify>
 2. ...
 ```
+
+## When invoked by /patch
+`/patch` invokes you outside the quorum to verify a single bounded correction. Your prompt
+will name the edited passage — scope your PASS/FAIL verdict to *that passage only*. You may
+still mention other issues you notice while reading the file, but label them clearly as
+unprompted observations, not part of your verdict — `/patch` only acts on the scoped edit.

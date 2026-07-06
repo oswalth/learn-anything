@@ -4,7 +4,8 @@ description: >-
   Reviews a drafted section against the Content depth standard — every concept must Motivate,
   cover Origins & evolution, explain Mechanism, state Tradeoffs, give Decision guidance, and
   Show it concretely; rejects tutorial-only or merely descriptive content. Returns PASS or a
-  numbered objection list. One of the four parallel critics in the /author quorum.
+  numbered objection list. One of the four parallel critics in the /author quorum; also
+  invoked stand-alone by /patch to verify a single flagged depth-addition.
 tools: Read
 model: opus
 ---
@@ -50,3 +51,9 @@ FAIL
 1. [concept @ theory.md:location] missing/thin: <which element> → <what to add>
 2. ...
 ```
+
+## When invoked by /patch
+`/patch` invokes you outside the quorum to verify a single bounded depth-addition. Your prompt
+will name the edited passage — scope your PASS/FAIL verdict to *that passage only*. You may
+still mention other thin concepts you notice while reading the file, but label them clearly as
+unprompted observations, not part of your verdict — `/patch` only acts on the scoped edit.

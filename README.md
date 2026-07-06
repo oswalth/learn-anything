@@ -105,8 +105,8 @@ directory). The interactive installer lets you pick a scope; user is the default
 If commands don't appear immediately, run `/reload-plugins`. You should see, namespaced as
 `learn-anything:<name>` (and usually as bare `/<name>`):
 
-`kickoff` · `plan-module` · `author` · `check` · `mentor` · `quiz` · `recall` ·
-`checkpoint` · `retro` · `update-baseline` · `evolve`
+`kickoff` · `plan-module` · `author` · `study` · `check` · `mentor` · `quiz` · `recall` ·
+`checkpoint` · `patch` · `retro` · `update-baseline` · `evolve`
 
 ### CLI equivalents (scripting / dotfiles)
 
@@ -283,6 +283,7 @@ Once a topic's roadmap is approved, the rhythm per module is:
 | `/quiz N.K` | Post-practice free-recall quiz; misses become cards | you or Claude |
 | `/recall [module N]` | Spaced-repetition session over due cards (SM-2) | you or Claude |
 | `/checkpoint` | Cumulative, integrative review at a phase boundary | you or Claude |
+| `/patch N.K` | Bounded, on-demand fix for one flagged claim in a generated section, verified by the matching critic — no full `/author` regeneration | you |
 | `/retro` | Retrospective on this topic; applies topic fixes, emits `/evolve` briefs for plugin fixes | you |
 | `/update-baseline` | Re-verify pinned versions via web search; flag stale generated sections | you |
 | `/evolve` | Safely change the **plugin itself** (run from the plugin checkout) | you |
@@ -341,7 +342,9 @@ Every generated section is held to two ported conventions (see
   interleave the two instead of handing over four static files.
 
 Freshness is enforced by a pinned `BASELINE.md` plus a mandatory web-research pass by a
-freshness critic at generation time.
+freshness critic at generation time. Post-authoring, `/patch N.K` lets a learner flag a
+single wrong or outdated claim (or a concept that's thin on depth) mid-study and get it
+fixed and re-verified immediately, without waiting for a full `/author` regeneration.
 
 ---
 
