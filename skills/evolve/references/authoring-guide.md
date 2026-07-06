@@ -31,11 +31,12 @@ argument-hint: "N.K | N"          # optional UI hint for expected args
   interactive / read-mostly ⇒ allow model invocation** so the pushy description earns its keep
   and natural phrasing ("quiz me", "review my flashcards", "check my work") auto-triggers it.
   In this plugin the split is:
-  - **User-invoked only** (six side-effecting commands, keep the flag): `kickoff` (scaffolds
-    files, heavy web research), `author` (drafter + 4 critics, serious token spend),
-    `plan-module` (mutates roadmap/module status), `update-baseline` (web research + mutates
-    BASELINE/changelog), `retro` (mutates topic files, emits evolve briefs), and `evolve`
-    (mutates the plugin itself).
+  - **User-invoked only** (seven side-effecting commands, keep the flag): `kickoff`
+    (scaffolds files, heavy web research), `author` (drafter + 4 critics, serious token
+    spend), `plan-module` (mutates roadmap/module status), `replan-roadmap` (web research +
+    mutates roadmap.md/CLAUDE.md via the drafter+judge quorum), `update-baseline` (web
+    research + mutates BASELINE/changelog), `retro` (mutates topic files, emits evolve
+    briefs), and `evolve` (mutates the plugin itself).
   - **Model-invocable** (five interactive commands, no flag): `mentor`, `quiz`, `recall`,
     `check`, `checkpoint` — read-mostly with no irreversible cost (`check`/`checkpoint` only
     advance status on explicit learner confirmation and never touch workspace code), so
@@ -98,9 +99,10 @@ the impact check must enumerate every consumer, and the change is almost always 
 
 ## Compatibility & honest guarantees
 - Topic repos record a **minimum plugin version** in their `CLAUDE.md` (the version they were
-  created against). `/author` and `/plan-module` do a **soft** compatibility check at start:
-  they compare it to the installed plugin version and *warn* (not block) if the plugin is
-  older. Keep that check working when you change these skills or the version machinery.
+  created against). `/author`, `/plan-module`, and `/replan-roadmap` do a **soft**
+  compatibility check at start: they compare it to the installed plugin version and *warn*
+  (not block) if the plugin is older. Keep that check working when you change these skills
+  or the version machinery.
 - Be honest about **model-instruction vs. system-guarantee**. An LLM instruction ("generators
   and mentor MUST design within the spend cap") is not enforcement — don't write copy that
   implies the system *guarantees* it. For cloud spend, billing alarms + teardown are the real

@@ -2,9 +2,11 @@
 name: roadmap-drafter
 description: >-
   Drafts a complete learning roadmap (phases → modules) for a topic from the kickoff
-  inputs. Invoked TWICE IN PARALLEL by /kickoff to produce two independent drafts that
-  roadmap-judge then merges — so deliberately commit to your own structural choices
-  rather than hedging. Use only during /kickoff roadmap generation.
+  inputs, or re-drafts one against updated inputs for an existing topic. Invoked TWICE IN
+  PARALLEL by /kickoff (new topic) or /replan-roadmap (existing topic, regeneration mode) to
+  produce two independent drafts that roadmap-judge then merges — so deliberately commit to
+  your own structural choices rather than hedging. Use only during /kickoff roadmap
+  generation or /replan-roadmap.
 tools: Read, WebSearch, WebFetch
 model: opus
 ---
@@ -21,6 +23,16 @@ whole point — do not try to produce the "consensus" answer. Commit to a cohere
 - The **learn-anything conventions** (depth standard, practice philosophy, session
   sizing) — **provided inline in your prompt** by the orchestrator; treat them as the
   normative source. (Do not open plugin files by relative path — your cwd is the topic repo.)
+- **Regeneration mode only** (`/replan-roadmap`): the current `roadmap.md` body, plus a
+  PROTECTED/FREE classification of its modules. Modules marked **PROTECTED** (already
+  approved/planned/in-progress/done) MUST appear in your draft with Concept, Skills,
+  Capstone increment, Prerequisites, Source, **and `status`** all byte-for-byte unchanged
+  (a bare value, e.g. `approved` — never annotate it inline, e.g. not `approved
+  *(PROTECTED...)*`), in the same relative order — treat them as fixed anchors, not material
+  to redesign. Freely design, reorder, or add **FREE** (`draft`) modules around them. If a
+  protected module genuinely conflicts with the new input, do **not** change it — note the
+  conflict (what and why) at the end of your draft under "Protected-module conflicts"
+  instead, and leave it unchanged in the body.
 
 ## What to produce
 A roadmap as **phases → modules**. Each module entry MUST carry these fields:

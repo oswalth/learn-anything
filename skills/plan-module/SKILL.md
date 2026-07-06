@@ -27,7 +27,19 @@ NOT write any `theory.md`/`practice.md`/etc.
   `draft`, or already `planned`/`in-progress`/`done`), refuse:
   - `draft` → tell the learner the roadmap module must be approved first (D8 gate).
   - `planned`+ → tell them it's already planned; offer to re-plan (which overwrites
-    the section list but preserves their notes) only if they confirm.
+    the section list but preserves their `## Notes`) only if they confirm. Before
+    overwriting, diff the proposed new section list against the current one by `id`/slug:
+    - Sections whose `id`/slug and goal are **unchanged** carry their current **section
+      status** (`planned`/`generated`/`studied`) forward untouched.
+    - Sections that would be **removed, renumbered, or have their goal materially changed**
+      while already at status `generated` or `studied` must be called out explicitly, with a
+      separate confirmation — re-planning must never silently orphan already-authored
+      content. Anything not confirmed keeps its current id/slug/goal/status; only the
+      confirmed part of the new plan is applied.
+    - Genuinely new sections are added as `status: planned`.
+    - A change to the module's own place in the roadmap (title, concept, scope, whether it's
+      included at all) is a roadmap-level change — that's `/replan-roadmap`, not
+      `/plan-module`.
 
 ## Read (context discipline — only these)
 - Topic `CLAUDE.md` — goal, success criteria, adjacent-expertise contrasts, capstone spec.

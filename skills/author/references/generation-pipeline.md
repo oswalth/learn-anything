@@ -88,7 +88,9 @@ If after 3 iterations any objection stands:
   **already on disk** — the drafter wrote them to the section directory. **Verify all five
   exist**, then:
 - Flip the **section status** to `generated` in the module `README.md` (section vocabulary:
-  `planned → generated → studied`). Set the **module status** in `roadmap.md` to
+  `planned → generated → studied`; if this run regenerated a previously `studied` section,
+  this flip un-certifies mastery back to `generated` — the confirm gate for that lives in
+  `/author`'s preconditions, not here). Set the **module status** in `roadmap.md` to
   `in-progress` (from `planned`; stays `in-progress` thereafter) and update the
   `modules/README.md` board. Never set a module to `generated` or `done` here — `done` is a
   mastery verdict owned by `/check N`.

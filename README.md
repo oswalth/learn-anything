@@ -275,8 +275,9 @@ Once a topic's roadmap is approved, the rhythm per module is:
 | Command | What it does | Invoke |
 |---|---|---|
 | `/kickoff` | Interview → gated roadmap → scaffold a topic repo | you |
-| `/plan-module N` | Break approved module N into 1–2 h sections | you |
-| `/author N.K` \| `/author N` | Generate a section (or a whole module, with a cost warning) through the drafter + 4-critic quorum | you |
+| `/plan-module N` | Break approved module N into 1–2 h sections; re-run to re-plan (confirms before touching already-generated/studied sections) | you |
+| `/author N.K` \| `/author N` | Generate a section (or a whole module, with a cost warning) through the drafter + 4-critic quorum; re-run on an already-`generated`/`studied` section to regenerate it (confirms first — this is the regeneration path, no separate command) | you |
+| `/replan-roadmap` | Regenerate roadmap.md through the drafter + judge quorum against updated goal/environment/conventions; protects already-approved+ modules by default | you |
 | `/study N.K` | Paced walkthrough: interleaves theory.md concepts with the practice.md challenges that build on them | you or Claude |
 | `/check N.K` \| `/check N` | Review your workspace against the section's / module's criteria; can mark section `studied` / module `done` on a pass | you or Claude |
 | `/mentor [N.K \| N]` | Socratic session; guides you to derive, never hands over solutions | you or Claude |
@@ -320,7 +321,8 @@ A topic repo is content-only and depends on the plugin. To pick a topic up elsew
 
 1. Install the plugin (see [§1](#1-install-the-plugin)) — the topic's `CLAUDE.md` records
    the marketplace/repo and the **minimum plugin version** it was created against.
-   `/author` and `/plan-module` warn you if the installed plugin is older than that minimum.
+   `/author`, `/plan-module`, and `/replan-roadmap` warn you if the installed plugin is
+   older than that minimum.
 2. Get the topic directory onto the machine (it's just files — clone/sync however you like).
 3. `cd` into it, start Claude Code, and continue with the [daily loop](#5-the-daily-loop--full-command-reference).
 

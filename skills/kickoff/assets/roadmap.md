@@ -13,7 +13,10 @@ planned or generated until the learner approves it. Each module carries a **modu
 - `/plan-module N` and `/author N.K` **refuse** to run on a module that is not yet
   `approved`.
 - After approval, **any** change to this roadmap requires a `CLAUDE.md` changelog entry
-  (keep-this-file-honest rule).
+  (keep-this-file-honest rule). Small edits: change directly. Larger restructuring — the
+  goal/environment changed, or you want a refresh against the plugin's current conventions —
+  run `/replan-roadmap`, which regenerates through the drafter+judge quorum while protecting
+  modules already `approved`+ by default.
 
 (**Section** statuses — `planned` → `generated` → `studied` — live in each module's
 `modules/NN-slug/README.md`, not here.)

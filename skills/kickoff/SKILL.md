@@ -96,3 +96,7 @@ Work through these in order. Detailed questions live in the interview script.
 ## When you finish (post-approval)
 Confirm the tree is scaffolded and summarize: the goal, the process mix, the spend cap, and
 the module count. Point the learner to `/plan-module 1`. Do not generate content.
+
+For **later** roadmap changes (the goal or environment shifts, or refreshing against newer
+plugin conventions), point the learner to `/replan-roadmap` rather than re-running
+`/kickoff` — `/kickoff` refuses to run on a directory that already has a topic.

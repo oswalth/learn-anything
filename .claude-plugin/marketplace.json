@@ -13,7 +13,7 @@
       "name": "learn-anything",
       "source": ".",
       "description": "AI-assisted self-learning for senior engineers: advise-level depth, mandatory origins/evolution context, challenge-based practice, and in-repo spaced-repetition retention.",
-      "version": "0.10.0",
+      "version": "0.11.0",
       "author": {
         "name": "oswalth"
       }

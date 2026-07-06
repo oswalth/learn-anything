@@ -1,11 +1,15 @@
 ---
 name: author
 description: >-
-  Generate one section's content — README.md, theory.md, practice.md, validation.md, quiz.md —
-  via the drafter + 4-critic quorum with a revise-until-pass loop. Use when the user says "generate
-  section N.K", "author section N.K", "generate module N", or runs /author N.K (one section) or
-  /author N (loop over a module, with an upfront cost warning). Refuses on modules that aren't
-  approved/planned. Side-effect command (spends tokens, writes files) — user-invoked only.
+  Generate — or regenerate — one section's content — README.md, theory.md, practice.md,
+  validation.md, quiz.md — via the drafter + 4-critic quorum with a revise-until-pass loop.
+  Use when the user says "generate section N.K", "author section N.K", "regenerate section
+  N.K", "redo section N.K", "generate module N", "regenerate module N", or runs /author N.K
+  (one section) or /author N (loop over a module, with an upfront cost warning). Re-running
+  on a section already `generated`/`studied` is how content gets regenerated — there is no
+  separate regenerate command — but it requires explicit confirmation before overwriting.
+  Refuses on modules that aren't approved/planned. Side-effect command (spends tokens, writes
+  files) — user-invoked only.
 disable-model-invocation: true
 argument-hint: "N.K (one section) | N (whole module)"
 ---
@@ -22,6 +26,23 @@ it is the authoritative procedure, including the revise loop and the surface-to-
   cost warning** (how many sections, that each runs a drafter + 4 critics + up to 3 revise
   rounds) and get a confirm before looping.
 - Missing → ask which section.
+
+## Regenerating (already-`generated`/`studied` content)
+This is the *only* path to regenerate a section — there is no separate `/regenerate`
+command. Before drafting, check the target section(s)' current **section status** in the
+module `README.md`:
+- **`planned`** → proceed normally, no extra confirmation needed.
+- **`generated` or `studied`** → this run will **overwrite** existing content and, for a
+  `studied` section, **un-certify mastery back to `generated`**. STOP and confirm explicitly
+  before proceeding: name the affected section(s) and their current status, and say plainly
+  that mastery status resets. Only continue on an explicit yes.
+- For `N` (module scope): if *some or all* sections in the module are already `generated`+,
+  fold them into the same upfront cost warning as the fresh-generation loop — list every
+  section that will be touched with its current status, get one confirmation covering all of
+  them, then loop through **every** section in the module (not just the still-`planned`
+  ones), applying the per-section confirm rule above implicitly (already covered by the
+  batch confirmation).
+- If the learner declines, leave the section(s) untouched and stop.
 
 ## Preconditions (check, then stop if unmet)
 - **Plugin compatibility (soft).** Read the topic `CLAUDE.md`'s recorded **Minimum version**
@@ -84,3 +105,9 @@ The five files are **already on disk** — the drafter wrote them to
   `generated` as a module status.
 - Tell the learner: start at `README.md`, then read `theory.md`, work `practice.md` in
   `workspace/`, then `/check N.K` and `/quiz N.K`.
+- If this was a **regeneration** of a previously `studied` section, say explicitly: mastery
+  reset to `generated` (re-`/check N.K` to re-certify); retention cards from the old
+  `quiz.md` are not retroactively edited — a fresh `/quiz N.K` layers new cards on top, so
+  suggest reviewing `retention/deck/` for that section if the content changed materially.
+  If `workspace/` already holds practice work for this section, note it may no longer match
+  the regenerated `practice.md` — suggest diffing before continuing.

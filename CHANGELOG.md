@@ -14,6 +14,65 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.11.0] — 2026-07-06
+
+Added regeneration support at all three content granularities. Learner feedback (from
+`learn-aws-ion`) was that content needs periodic refresh for reasons that have nothing to do
+with it being wrong — a plugin update landed a fresher process, an input changed (e.g. an
+AWS account that didn't exist at kickoff time now does), or the learner's goal itself moved
+— and there was no sanctioned way to regenerate short of hand-editing files (minor — new
+command + new behavior on two existing commands, no topic-repo file *format* changes, so no
+migration needed). Originating topic: `learn-aws-ion`.
+
+- **New `skills/replan-roadmap/SKILL.md`.** Regenerates `roadmap.md` through the same
+  `roadmap-drafter` ×2 + `roadmap-judge` quorum `/kickoff` uses, against the topic's current
+  `CLAUDE.md`/environment/conventions. Protects modules already
+  `approved`/`planned`/`in-progress`/`done` by default — only `draft` and net-new modules are
+  freely redesigned; any conflict with a protected module is surfaced as a
+  "Protected-module conflicts" note rather than silently applied. Re-gates at learner
+  approval exactly like `/kickoff`'s D8 hard stop. Justified as a new skill (rather than
+  folding into an existing one) because no existing command's job covers it: `/kickoff`
+  structurally refuses to run on an existing topic, and `roadmap.md` is a *persistent*
+  artifact (unlike the five disposable section files `/author` overwrites), so it needed its
+  own gated, diff-reviewed procedure.
+- **`agents/roadmap-drafter.md`, `agents/roadmap-judge.md`.** Now documented as shared
+  between `/kickoff` and `/replan-roadmap`; both gained a "regeneration mode" input
+  (current `roadmap.md` + a PROTECTED/FREE module classification) and instructions to leave
+  PROTECTED modules' fields untouched, flagging conflicts instead of silently resolving them.
+- **`skills/author/SKILL.md`, `skills/author/references/generation-pipeline.md`.** Re-running
+  `/author N.K` (or `/author N`) on a section already `generated`/`studied` is now the
+  explicit regeneration path — no separate command. It requires confirming before
+  overwriting, warns that regenerating a `studied` section un-certifies mastery back to
+  `generated`, and notes that stale retention cards aren't retroactively edited and
+  in-progress `workspace/` work may no longer match a regenerated `practice.md`.
+- **`skills/plan-module/SKILL.md`.** Re-planning an already-`planned`+ module now diffs the
+  proposed section list against the current one by id/slug and requires separate
+  confirmation before removing, renumbering, or materially changing the goal of any section
+  already `generated`/`studied` — re-planning can no longer silently orphan authored content.
+- **`skills/kickoff/SKILL.md`, `skills/kickoff/assets/roadmap.md`.** Both now point to
+  `/replan-roadmap` for post-approval roadmap changes instead of leaving it undocumented.
+- **`skills/evolve/references/authoring-guide.md`.** `replan-roadmap` added to the
+  `disable-model-invocation: true` roster (seven side-effecting commands now) and to the
+  soft plugin-compatibility-check list.
+- **`README.md`** command reference table and §7 updated for `/replan-roadmap` and the
+  amended `/author`/`/plan-module` regeneration behavior.
+- **Smoke-tested the new agent mechanism directly** (`kickoff`/`author`/`plan-module`/
+  `replan-roadmap` are all `disable-model-invocation: true` by design, so they can't be
+  self-triggered to test end-to-end in one sitting; the `/author`/`/plan-module` confirm/diff
+  logic added above is orchestration-only text, verified by inspection). Invoked
+  `roadmap-drafter` ×2 and `roadmap-judge` directly (Agent tool) with a constructed
+  regeneration scenario — a 2-module roadmap with Module 01 `approved` (PROTECTED) and
+  Module 02 `draft` (FREE), and a changed goal (added cross-account access). Both drafters
+  correctly reproduced Module 01 verbatim, freely redesigned/expanded the FREE module into a
+  multi-phase cross-account track, and used the "Protected-module conflicts" escape hatch
+  instead of silently editing Module 01 when they judged it relevant. The judge merged both
+  drafts, preserved Module 01, and de-duplicated the conflict notes as designed — **but**
+  rendered the protected module's status as `approved *(PROTECTED — reproduced verbatim...)*`
+  instead of a bare `approved`, which would have broken every other skill's exact-string
+  status match (`/plan-module`, `/author`, `/check`) had it been written to disk. Fixed by
+  adding an explicit bare-status-value requirement to `roadmap-drafter.md` and
+  `roadmap-judge.md`, plus a defensive strip-before-write check in `/replan-roadmap` Step 5.
+
 ## [0.10.0] — 2026-07-06
 
 Added a seventh, conditional element to the Content depth standard — **Visualize it** —
