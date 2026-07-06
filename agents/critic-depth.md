@@ -8,7 +8,7 @@ description: >-
   or a numbered objection list. One of the four parallel critics in the /author quorum; also
   invoked stand-alone by /patch to verify a single flagged depth-addition.
 tools: Read
-model: opus
+model: sonnet
 ---
 
 You are the **depth critic**. You enforce the learn-anything **Content depth standard**

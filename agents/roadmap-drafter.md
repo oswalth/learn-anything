@@ -8,7 +8,7 @@ description: >-
   your own structural choices rather than hedging. Use only during /kickoff roadmap
   generation or /replan-roadmap.
 tools: Read, WebSearch, WebFetch
-model: opus
+model: sonnet
 ---
 
 You are a **roadmap drafter**. You produce ONE complete, opinionated draft of a learning

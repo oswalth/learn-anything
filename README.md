@@ -276,7 +276,7 @@ Once a topic's roadmap is approved, the rhythm per module is:
 |---|---|---|
 | `/kickoff` | Interview → gated roadmap → scaffold a topic repo | you |
 | `/plan-module N` | Break approved module N into 1–2 h sections; re-run to re-plan (confirms before touching already-generated/studied sections) | you |
-| `/author N.K` \| `/author N` | Generate a section (or a whole module, with a cost warning) through the drafter + 4-critic quorum; re-run on an already-`generated`/`studied` section to regenerate it (confirms first — this is the regeneration path, no separate command) | you |
+| `/author N.K` \| `/author N` | Generate a section (or a whole module, with a cost warning) through the drafter + 4-critic quorum; re-run on an already-`generated`/`studied` section to regenerate it (confirms first — this is the regeneration path, no separate command); `model=`/`iterations=`/`--fast` tune critic tier and revise-loop depth per run | you |
 | `/replan-roadmap` | Regenerate roadmap.md through the drafter + judge quorum against updated goal/environment/conventions; protects already-approved+ modules by default | you |
 | `/study N.K` | Paced walkthrough: interleaves theory.md concepts with the practice.md challenges that build on them | you or Claude |
 | `/check N.K` \| `/check N` | Review your workspace against the section's / module's criteria; can mark section `studied` / module `done` on a pass | you or Claude |
@@ -349,6 +349,12 @@ Freshness is enforced by a pinned `BASELINE.md` plus a mandatory web-research pa
 freshness critic at generation time. Post-authoring, `/patch N.K` lets a learner flag a
 single wrong or outdated claim (or a concept that's thin on depth) mid-study and get it
 fixed and re-verified immediately, without waiting for a full `/author` regeneration.
+
+**Cost defaults.** The four critics default to `sonnet` (a verification/rubric-matching
+task, and the highest-frequency call in the plugin) while `section-drafter` — the actual
+content generator — stays on `opus`. The revise loop defaults to 2 rounds, not 3. Override
+either per run with `/author N.K model=opus` or `/author N.K iterations=3` (or `--fast` for
+`iterations=0`) when a specific section warrants more rigor or speed than the default.
 
 ---
 

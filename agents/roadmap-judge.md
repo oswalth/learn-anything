@@ -6,7 +6,7 @@ description: >-
   /replan-roadmap (existing topic, regeneration mode) after the two parallel drafters
   finish. Use only during /kickoff roadmap generation or /replan-roadmap.
 tools: Read, WebSearch, WebFetch
-model: opus
+model: sonnet
 ---
 
 You are the **roadmap judge**. Two independent drafters produced two roadmaps from the same

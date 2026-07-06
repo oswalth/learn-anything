@@ -14,6 +14,71 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.12.0] — 2026-07-06
+
+Cut token/dollar cost across the plugin without cutting detection capability. Learner ask:
+"make the plugin spend less without losing quality." Investigation found the actual biggest
+lever wasn't the critic quorum's existence (the learner's own suggested fix — disable
+critics by default) but two unexamined defaults: **every agent in the plugin, including all
+four critics, was hardcoded to `model: opus`**, and every drafter/critic call got the
+**full 199-line `conventions/SKILL.md` inlined** regardless of whether that agent's own
+checklist used more than one section of it. Critics are the highest-frequency call in the
+plugin (up to ~12–16 opus calls per section across revise rounds — far more than the
+drafter's ~1–4), and their job is rubric/criteria-matching, not open-ended synthesis — so
+fixing the tier there captures most of the available savings while every critic still runs,
+still checks its full domain, and (per the smoke test below) still catches the same defects.
+Minor — new behavior + new learner-facing args on `/author`; no topic-repo file format
+changes, so no migration needed.
+
+- **`agents/critic-accuracy.md`, `critic-freshness.md`, `critic-depth.md`,
+  `critic-pedagogy.md`.** Default model `opus` → `sonnet`. `critic-accuracy` now gets **no**
+  conventions text at all (correctness isn't conventions-governed; its checklist is
+  self-contained); `critic-freshness` gets only conventions §6's freshness bullet;
+  `critic-depth` gets only §1+§3; `critic-pedagogy` gets only §2+§4 — each already only
+  enforced its own domain, so the rest of the file was dead weight on every call.
+- **`agents/roadmap-drafter.md`, `roadmap-judge.md`.** Default model `opus` → `sonnet` too,
+  for consistency, though the aggregate savings here are small since roadmap generation
+  happens once per topic (via `/kickoff` or occasionally `/replan-roadmap`), not once per
+  section. `section-drafter` stays on `opus` — it's the actual content generator (the
+  learner's product), runs far less often per section than the critics, and a weaker draft
+  could *increase* total cost by triggering more revise rounds, so the tradeoff cuts the
+  other way there.
+- **`skills/author/SKILL.md`, `skills/author/references/generation-pipeline.md`.** Max
+  revise-loop iterations default `3` → `2` (the existing "surface unresolved objections,
+  never hide them" fallback already exists precisely for the case where a fix doesn't
+  converge in the allotted rounds). Both the critic model and the iteration cap are now
+  learner-configurable per run via new `/author` args: `model=opus|sonnet|haiku` and
+  `iterations=0-3` (`--fast` is shorthand for `iterations=0` — critics still run once in
+  full, but nothing is auto-revised, objections surface immediately). Neither arg changes
+  what a critic checks, only how much model tier and how many revise attempts are spent
+  verifying it.
+- **`skills/evolve/references/authoring-guide.md`.** New "Model tier discipline" guidance:
+  default new agents to the cheapest tier that reliably does the job; rubric/criteria-
+  matching tasks default to `sonnet`, content-generation tasks stay on `opus` unless proven
+  otherwise, and any per-invocation rigor/cost tradeoff must be an explicit, learner-visible
+  override with a stated default — never a silent, invocation-varying choice.
+- **`README.md`.** Command table and a new "Cost defaults" paragraph document the sonnet
+  default, the opus exception for `section-drafter`, the iterations=2 default, and the
+  override args.
+- **Not done, and why:** disabling the critic quorum by default (the learner's original
+  suggestion) was rejected — it removes an entire detection dimension (accuracy, freshness,
+  depth, or pedagogy) from every section by default, and the smoke test below shows the
+  quorum is now materially cheaper without that cut. Dropping `roadmap-drafter` from two
+  parallel drafts to one, and merging the four critics into fewer multi-domain agents, were
+  also considered and rejected as poor risk/reward (see the `/evolve` conversation for the
+  full option list).
+- **Smoke-tested for real** (not just by inspection): built a scratch section
+  (`theory.md`/`practice.md`/`validation.md`/`quiz.md`) with three deliberately planted
+  defects — theory.md missing the Origins & evolution element entirely, plus a flatly false
+  claim ("Python lists are immutable"); practice.md's challenge with a filled-in solution
+  body instead of `# YOUR CODE HERE`. Invoked `critic-depth` with only the §1+§3 excerpt,
+  `critic-pedagogy` with only the §2+§4 excerpt, and `critic-accuracy` with no conventions
+  text at all — each on its new `sonnet` default, no override. All three caught their
+  planted defect correctly (`critic-depth` and `critic-pedagogy` additionally surfaced
+  legitimate secondary issues unprompted — a concurrency edge case, an under-specified
+  verification path, under-scoped practice — showing the narrower conventions excerpt and
+  cheaper model tier did not dull judgment).
+
 ## [0.11.0] — 2026-07-06
 
 Added regeneration support at all three content granularities. Learner feedback (from

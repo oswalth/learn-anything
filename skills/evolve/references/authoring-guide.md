@@ -78,7 +78,7 @@ does not resolve. Distinguish the two consumers:
 name: <kebab-case>
 description: <what it specializes in and when it's invoked>
 tools: Read, WebSearch, WebFetch   # optional — least privilege; add Bash only if it must run code
-model: opus                        # optional
+model: sonnet                      # optional — see "Model tier discipline" below
 ---
 <concise system prompt: role, inputs it will be given, what to produce, output format>
 ```
@@ -89,6 +89,17 @@ model: opus                        # optional
   `critic-accuracy` gets `Bash`, because it executes code samples.
 - Plugin-shipped agents may **not** define `hooks`, `mcpServers`, or `permissionMode`, and the
   only valid `isolation` value is `worktree`.
+- **Model tier discipline.** Default new agents to the **cheapest tier that reliably does the
+  job**; pin a pricier tier only with a stated reason. Rubric/criteria-matching tasks (the four
+  critics: checking a section against an explicit checklist) default to `sonnet` — this is a
+  verification task, not open-ended synthesis, and it is also the **highest-frequency** call
+  in the plugin (up to ~12–16 critic calls per section across revise rounds), so its tier
+  choice dominates aggregate cost. `section-drafter` stays on `opus`: it is the actual content
+  generator (the learner's product), runs far less often per section than the critics, and a
+  weaker draft can *increase* total cost by triggering more revise rounds — the tradeoff cuts
+  the other way there. When a command needs to trade rigor for cost on a specific invocation
+  (see `/author`'s `model=`/`iterations=` args), make that an explicit, learner-visible
+  override with a stated default — never a silent, invocation-varying choice.
 
 ## Conventions changes are special
 The depth standard, practice philosophy, evolution-lens rule, session sizing, and changelog
