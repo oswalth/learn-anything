@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+*.swp
+
+# Local Claude settings (keep the plugin's own machinery tracked; ignore per-checkout local overrides)
+.claude/settings.local.json

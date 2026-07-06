@@ -1,0 +1,19 @@
+{
+  "name": "learn-anything",
+  "version": "0.5.1",
+  "description": "AI-assisted self-learning for senior engineers: advise-level depth, mandatory origins/evolution context, challenge-based practice, and in-repo spaced-repetition retention. Scaffolds content-only topic repos and drives them through kickoff -> gated roadmap -> plan -> author -> learn -> check -> quiz -> recall, with a guarded self-evolution workflow.",
+  "author": {
+    "name": "oswalth"
+  },
+  "homepage": "https://github.com/oswalth/learn-anything",
+  "repository": "https://github.com/oswalth/learn-anything",
+  "license": "MIT",
+  "keywords": [
+    "learning",
+    "education",
+    "curriculum",
+    "spaced-repetition",
+    "self-study",
+    "mentoring"
+  ]
+}
