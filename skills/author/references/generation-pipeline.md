@@ -45,7 +45,8 @@ navigational and not judged) from the section dir it is given:
   outputs are achievable.
 - `critic-freshness` — every version-sensitive claim vs `BASELINE.md` + live web; "as of
   <date>" phrasing for volatile facts.
-- `critic-depth` — the six depth-standard elements per concept, Origins & evolution hardest.
+- `critic-depth` — the six depth-standard elements per concept (Origins & evolution
+  hardest), plus Visualize it for concepts with structure/flow/hierarchy.
 - `critic-pedagogy` — challenge-based practice, ≤2 worked examples, verifiable behavior,
   hint blocks, the theory↔practice `Builds on:` tag, 1–2 h sizing.
 

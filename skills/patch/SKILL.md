@@ -48,8 +48,9 @@ From the learner's note, classify as exactly one of:
 - **wrong** — a claim is factually incorrect.
 - **outdated** — a claim was true once but the world has moved on (version, default, API,
   "current best practice").
-- **thin** — a concept is present but missing one of the six depth-standard elements
-  (conventions §1), or the learner explicitly asked for more depth on it.
+- **thin** — a concept is present but missing one of the depth-standard elements
+  (conventions §1) — including an applicable Visualize it diagram for a
+  structural/flow/hierarchy concept — or the learner explicitly asked for more depth on it.
 
 If the note doesn't clearly fit one of these, ask rather than guessing.
 

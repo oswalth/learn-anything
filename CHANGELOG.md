@@ -14,6 +14,40 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.10.0] — 2026-07-06
+
+Added a seventh, conditional element to the Content depth standard — **Visualize it** —
+for concepts whose mental model is structural, sequential, or relational (an evaluation
+flow like IAM policy evaluation, an account/org hierarchy, a request path, a network
+topology, a state machine). Learner feedback (from `learn-aws-ion`) was that even sections
+hitting all six depth-standard elements still read as flat prose for these concept types
+without a diagram (minor — new depth-standard clause and drafter/critic behavior change, no
+topic-repo file format changes, so no migration needed). Originating topic: `learn-aws-ion`.
+
+- **`skills/conventions/SKILL.md` §1.** New clause 7: an ASCII diagram or fenced
+  ` ```mermaid ` block, placed alongside the Mechanism block (§1.3) as a supplement (never a
+  replacement for the prose). Explicitly conditional — skipped for concepts that are
+  genuinely flat/scalar (a single value, a config flag, a non-branching API call), with no
+  objection raised for that omission.
+- **`agents/section-drafter.md`.** `theory.md` generation instructions now include the
+  conditional diagram, with guidance to prefer Mermaid for named-node/directed-edge shapes
+  (flowcharts, sequences, hierarchy graphs — renders inline on GitHub and most markdown
+  viewers) and ASCII for simple box-and-arrow shapes or where Mermaid syntax doesn't fit.
+- **`agents/critic-depth.md`.** New check item 7: judges applicability itself per concept —
+  objects to a missing diagram only when the concept plainly has structure/flow/hierarchy to
+  draw, never invents structure to justify an objection. Frontmatter description updated to
+  match.
+- **Cross-reference wording** updated for consistency: `skills/author/references/generation-pipeline.md`,
+  `skills/patch/SKILL.md` (the **thin** classification now covers a missing applicable
+  diagram), and `README.md`'s depth-standard summary bullet.
+- Smoke-tested against a throwaway scratch topic (`mktemp -d`, IAM policy evaluation as the
+  structural case and the policy `Version` field as the deliberately flat case, run directly
+  through `section-drafter` + `critic-depth` rather than a full `/kickoff`, since the change
+  is scoped to drafting/critique behavior, not roadmap generation): the drafter emitted an
+  ASCII diagram for the structural concept and correctly omitted one for the flat concept,
+  and `critic-depth` PASSed both, correctly not objecting to the flat concept's missing
+  diagram.
+
 ## [0.9.0] — 2026-07-06
 
 Added `/patch N.K "note"`, an on-demand, bounded correction command — a learner who flags a

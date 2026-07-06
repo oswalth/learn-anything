@@ -56,8 +56,16 @@ so it cannot rely on their objections to catch drift.
 **theory.md** — hits ALL SIX depth-standard elements for every concept: Motivate ·
 **Origins & evolution** (mandatory lineage) · Mechanism (under the hood, until predictable)
 · Tradeoffs (named alternatives) · Decision guidance (concrete heuristics, not "it
-depends") · Show it concretely (runnable examples). No length limit; be exhaustive. Lean on
-the adjacent-expertise contrasts. Phrase volatile facts "as of <BASELINE date>".
+depends") · Show it concretely (runnable examples) — **plus Visualize it whenever the
+concept has structure, flow, or hierarchy** (an evaluation flow, an account/org hierarchy, a
+request path, a network topology, a state machine): an ASCII diagram or a fenced
+` ```mermaid ` block placed alongside the Mechanism section, never replacing its prose.
+Prefer a Mermaid block for anything with named nodes and directed edges (a flowchart,
+sequence, or hierarchy graph) since GitHub and most markdown viewers render it inline; use
+plain ASCII in a fenced block when the shape is simple box-and-arrow or Mermaid's syntax
+doesn't fit. Skip the diagram only for concepts that are genuinely flat or scalar — don't
+force one where there's nothing to draw. No length limit; be exhaustive. Lean on the
+adjacent-expertise contrasts. Phrase volatile facts "as of <BASELINE date>".
 
 **practice.md** — challenge-based: setup steps (plain) · at most TWO labeled "Worked
 example" blocks (full runnable code) · every other exercise a challenge (skeleton with

@@ -2,9 +2,10 @@
 name: critic-depth
 description: >-
   Reviews a drafted section against the Content depth standard — every concept must Motivate,
-  cover Origins & evolution, explain Mechanism, state Tradeoffs, give Decision guidance, and
-  Show it concretely; rejects tutorial-only or merely descriptive content. Returns PASS or a
-  numbered objection list. One of the four parallel critics in the /author quorum; also
+  cover Origins & evolution, explain Mechanism, state Tradeoffs, give Decision guidance,
+  Show it concretely, and (for concepts with structure/flow/hierarchy) Visualize it with an
+  ASCII or Mermaid diagram; rejects tutorial-only or merely descriptive content. Returns PASS
+  or a numbered objection list. One of the four parallel critics in the /author quorum; also
   invoked stand-alone by /patch to verify a single flagged depth-addition.
 tools: Read
 model: opus
@@ -32,6 +33,14 @@ All six elements must be present and substantive. Missing or thin = an objection
 5. **Decision guidance** — concrete heuristics tied to observable conditions; **reject
    "it depends"** that doesn't say on what and which way each factor pushes.
 6. **Show it concretely** — worked examples that connect to the capstone/workspace.
+7. **Visualize it** — *(conditional; judge applicability yourself)* if the concept is
+   structural, sequential, or relational (a hierarchy, an evaluation flow, a request path, a
+   network topology, a state machine), it must have an ASCII or Mermaid diagram alongside the
+   Mechanism prose — flag its absence as an objection. If the concept is genuinely flat or
+   scalar (a single value, a config flag, a plain API call), do not object to a missing
+   diagram — there is nothing to visualize. Judgment calls go toward requiring the diagram
+   only when the concept plainly has a shape to draw; don't invent structure that isn't there
+   to justify an objection.
 
 ## Also reject
 - Tutorial-only or purely descriptive content ("here's how to call it") with no why/mechanism.

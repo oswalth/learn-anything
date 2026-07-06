@@ -335,7 +335,9 @@ Every generated section is held to two ported conventions (see
 
 - **Content depth standard** — for *every* concept: motivate it · **origins & evolution**
   (what world made it necessary, what it displaced) · mechanism (under the hood) ·
-  tradeoffs · decision guidance · show it concretely. Tutorial-only content is a failure.
+  tradeoffs · decision guidance · show it concretely · **visualize it** (an ASCII or
+  Mermaid diagram for concepts with structure, flow, or hierarchy). Tutorial-only content is
+  a failure.
 - **Practice philosophy** — challenge-based, not copy-paste: at most two worked examples,
   then skeletons with `# YOUR CODE HERE`, verifiable expected behavior, and hint ladders.
   Each one links back to the exact theory.md concept it builds on, which `/study` uses to

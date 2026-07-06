@@ -37,7 +37,8 @@ justify decisions — not merely use it.** Surface-level, descriptive, or tutori
 content is a **failure**, not a lighter option.
 
 For **every concept** a section introduces, `theory.md` MUST contain all six of the
-following. Missing any one is a depth defect:
+following, plus a seventh (**Visualize it**) whenever the concept has structure, flow, or
+hierarchy. Missing any of the six — or an applicable diagram — is a depth defect:
 
 1. **Motivate it.** What problem does it solve? What goes wrong without it? Why does it
    exist at all? Start from the pain, not the API.
@@ -58,6 +59,17 @@ following. Missing any one is a depth defect:
    "it depends"** without saying *on what* and *which way each factor pushes*.
 6. **Show it concretely.** Small, correct, runnable examples first; then how it applies to
    the topic's capstone/workspace. Examples must actually run and produce the stated result.
+7. **Visualize it — when the concept has structure, flow, or hierarchy.** If the concept's
+   mental model is fundamentally relational or sequential — an evaluation flow (e.g. IAM
+   policy evaluation), a hierarchy (account/org structure), a request path, a network
+   topology, a state machine — include an ASCII diagram or a fenced ` ```mermaid ` block
+   that makes the shape visible at a glance. Place it alongside the Mechanism block (§1.3)
+   as a supplement, never as a replacement for the prose explanation. Skip this element
+   only when the concept is genuinely flat or scalar (a single value, a config flag, an API
+   call with no branching) — in that case there is nothing to diagram and its absence is not
+   an objection. When it's a close call, include the diagram: a visible mental model is cheap
+   insurance against content that reads as flat prose even when the other six elements are
+   present.
 
 **No length limit.** Depth and completeness beat brevity. Sections exist precisely so each
 can be exhaustive within one focused pass. A section is sized to a single 1–2 h study
