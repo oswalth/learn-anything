@@ -18,7 +18,9 @@ Major bumps MUST include a migration note for existing topic repos.
 
 Added a root `CLAUDE.md` — the plugin repo's own operating manual — so its maintenance
 discipline is always loaded, not just recalled when someone happens to run `/evolve` (minor —
-new always-on behavior via an auto-loaded file; no command/format change).
+new always-on behavior via an auto-loaded file; no command/format change). Bundled in the same
+release: `section-drafter` now always emits a fifth, navigational `README.md` per section
+(minor — new file in the generation contract, additive/non-breaking for existing sections).
 
 - **Added `CLAUDE.md`** at the repo root: the one-hard-rule statement that all changes go
   through `/evolve`/`/retro`, the version-bump + changelog requirement (with the semver
@@ -29,15 +31,32 @@ new always-on behavior via an auto-loaded file; no command/format change).
   the no-bundled-example-topic rule, and a repo map. Explicitly distinguishes itself from the
   topic-repo `CLAUDE.md` template in `skills/kickoff/assets/CLAUDE.md`, which is a different
   document for a different audience.
-- **`README.md`** repository-layout tree now lists `CLAUDE.md`.
+- **`section-drafter` now writes a fifth artifact, `README.md`**, alongside `theory.md`,
+  `practice.md`, `validation.md`, `quiz.md` — a short navigational front door written last,
+  once the other four are final: a "Before you start" prerequisite checklist (pointing to
+  exactly where each prerequisite is actually handled, even if `practice.md`'s own Setup block
+  also covers it) and an "Order" section with the concrete sequence to work the other four
+  files in plus rough time budgets, ending with a pointer to the next section (or `/check N`
+  if it's the module's last one). README.md is explicitly excluded from the four critics'
+  read list — it's navigational, not judged content, so it never triggers a critic re-run.
+  `skills/author/SKILL.md`, `skills/author/references/generation-pipeline.md`, and
+  `skills/conventions/SKILL.md`'s disposable-artifacts list were updated to match.
+- **`README.md`** repository-layout tree now lists `CLAUDE.md`; its daily-loop walkthrough now
+  mentions generating and starting from `README.md`.
 - **`marketplace.json`**'s mirrored `plugins[0].version` bumped alongside `plugin.json`, per
   the new sync rule this same change documents.
-- *Why:* the plugin already had every one of these rules — scattered across `README.md`,
-  `SPEC.md §10`, `skills/evolve/references/authoring-guide.md`, and `skills/conventions/
-  SKILL.md §5` — but nothing surfaced them to a Claude session (or a human) that opens this
-  repo directly without going through `/evolve` first. A root `CLAUDE.md` is what Claude Code
-  auto-loads every session, closing that gap without duplicating the source-of-truth text
-  anywhere.
+- *Why (CLAUDE.md):* the plugin already had every one of these rules — scattered across
+  `README.md`, `SPEC.md §10`, `skills/evolve/references/authoring-guide.md`, and
+  `skills/conventions/SKILL.md §5` — but nothing surfaced them to a Claude session (or a
+  human) that opens this repo directly without going through `/evolve` first. A root
+  `CLAUDE.md` is what Claude Code auto-loads every session, closing that gap without
+  duplicating the source-of-truth text anywhere.
+- *Why (README.md artifact):* a learner found section 01.1 of `learn-aws-ion` disorienting to
+  start cold — the AWS-account prerequisite was buried inside `practice.md`'s Setup block
+  instead of being the first thing surfaced, and nothing stated the intended file order. That
+  topic had already validated the fix as a per-topic override (`.claude/agents/
+  section-drafter.md`); this promotes it into the plugin default via `/evolve` so every topic
+  gets it, not just the one that discovered the need.
 
 ## [0.5.2] — 2026-07-06
 
