@@ -259,7 +259,9 @@ Once a topic's roadmap is approved, the rhythm per module is:
 ```text
 /plan-module 1     →  break approved module 1 into 1–2 h sections (cheap, no content yet)
 /author 1.1        →  generate section 1.1 (README + theory + practice + validation + quiz), via the critic quorum
-                      … start at README.md, then theory.md, then practice.md in workspace/ …
+/study 1.1         →  paced walkthrough: interleaves theory.md concepts with the practice.md
+                      challenges that build on them, waiting for you at each step (or work the
+                      files solo, starting at README.md)
 /check 1.1         →  review your work against the section's criteria (never rewrites your code)
 /quiz 1.1          →  free-recall quiz; misses become spaced-repetition cards
 /recall            →  daily: review the cards that are due
@@ -275,6 +277,7 @@ Once a topic's roadmap is approved, the rhythm per module is:
 | `/kickoff` | Interview → gated roadmap → scaffold a topic repo | you |
 | `/plan-module N` | Break approved module N into 1–2 h sections | you |
 | `/author N.K` \| `/author N` | Generate a section (or a whole module, with a cost warning) through the drafter + 4-critic quorum | you |
+| `/study N.K` | Paced walkthrough: interleaves theory.md concepts with the practice.md challenges that build on them | you or Claude |
 | `/check N.K` \| `/check N` | Review your workspace against the section's / module's criteria; can mark section `studied` / module `done` on a pass | you or Claude |
 | `/mentor [N.K \| N]` | Socratic session; guides you to derive, never hands over solutions | you or Claude |
 | `/quiz N.K` | Post-practice free-recall quiz; misses become cards | you or Claude |
@@ -333,6 +336,8 @@ Every generated section is held to two ported conventions (see
   tradeoffs · decision guidance · show it concretely. Tutorial-only content is a failure.
 - **Practice philosophy** — challenge-based, not copy-paste: at most two worked examples,
   then skeletons with `# YOUR CODE HERE`, verifiable expected behavior, and hint ladders.
+  Each one links back to the exact theory.md concept it builds on, which `/study` uses to
+  interleave the two instead of handing over four static files.
 
 Freshness is enforced by a pinned `BASELINE.md` plus a mandatory web-research pass by a
 freshness critic at generation time.

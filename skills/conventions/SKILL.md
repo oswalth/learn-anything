@@ -90,7 +90,17 @@ this structure:
      bullets that point into the relevant `theory.md` section and name the key API/idea.
      Hints ladder from "which technique class" toward "first step" — never toward the
      answer.
-4. **Drills / predict-then-run** exercises are welcome — they are already challenge-format.
+4. **Theory–practice linking.** Every worked example and challenge heading carries a
+   `**Builds on:** theory.md § "<exact heading text>"` line directly beneath it, naming the
+   theory.md heading(s) it draws on. For more than one heading, list them in a single tag
+   line separated by commas, e.g. `**Builds on:** theory.md § "A", theory.md § "B"` — never
+   split across multiple tag lines. This is what lets `/study` interleave theory and practice
+   precisely instead of guessing; a tag naming a heading absent from `theory.md`, or a
+   missing tag, is a `critic-pedagogy` FAIL **at generation/revision time**. Sections
+   generated before this convention existed are unaffected and are never re-judged against
+   it — `/study` detects the absence of tags and falls back to the section's `README.md`
+   Order sequence for them.
+5. **Drills / predict-then-run** exercises are welcome — they are already challenge-format.
 
 **Capstone / workspace increments follow the same rule:** provide acceptance criteria and
 a skeleton, never a filled-in feature.

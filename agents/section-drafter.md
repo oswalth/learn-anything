@@ -62,9 +62,15 @@ the adjacent-expertise contrasts. Phrase volatile facts "as of <BASELINE date>".
 **practice.md** — challenge-based: setup steps (plain) · at most TWO labeled "Worked
 example" blocks (full runnable code) · every other exercise a challenge (skeleton with
 typed signatures + calling code + `# YOUR CODE HERE`, expected output/observable behavior,
-`<details>` hints ladder). Capstone increments = acceptance criteria + skeleton, never a
-finished feature. Never exceed the spend cap. For non-code topics use the non-code
-adaptation (worked problem / problem statement + answer-shape + verification method).
+`<details>` hints ladder). Every worked example and challenge heading carries a
+`**Builds on:** theory.md § "<exact heading text>"` line directly beneath it, naming the
+theory.md heading(s) it draws on — for more than one, comma-separate them in the same line
+(`**Builds on:** theory.md § "A", theory.md § "B"`), never split across multiple tag lines
+(conventions §2). This is what `/study` uses to interleave theory and practice instead of
+guessing. Capstone increments = acceptance criteria +
+skeleton, never a finished feature. Never exceed the spend cap. For non-code topics use the
+non-code adaptation (worked problem / problem statement + answer-shape + verification
+method).
 
 **validation.md** — the criteria /check uses to review the learner's work: an explicit
 checklist of what a correct solution must satisfy, the observable/verifiable signals

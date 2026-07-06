@@ -28,6 +28,13 @@ READ `practice.md` (and the other section files as needed) from there.
   learner can check without a reference solution. Missing verification = objection.
 - **Hint blocks.** Each challenge has an expandable `<details>` hints block, 2–4 bullets,
   laddering from "which technique class" toward "first step" — never revealing the answer.
+- **Theory–practice linking.** Every worked example and challenge has a
+  `**Builds on:** theory.md § "<heading>"` line directly under its heading, naming a heading
+  that actually exists in `theory.md` (read `theory.md` to verify). Missing the tag, or
+  naming a heading absent from `theory.md`, is a FAIL. This check applies only to sections
+  you are drafting/revising now — never apply it retroactively to a section you weren't
+  asked to critique; sections predating this convention are handled by `/study`'s fallback,
+  not by re-running this critic against them.
 - **Capstone increments** give acceptance criteria + skeleton, never a finished feature.
 - **Spend cap.** No exercise/experiment exceeds the `ENVIRONMENT.md` cap; cloud topics put
   billing alarms + teardown first.

@@ -14,6 +14,43 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.7.0] — 2026-07-06
+
+Added `/study N.K`, a paced walkthrough command that interleaves a section's `theory.md`
+concepts with the `practice.md` challenges that build on them — waiting for the learner
+between each step — instead of handing over four static files and leaving them to work
+solo (minor — new command, plus an additive convention/generation-contract change).
+
+- **New skill `skills/study/SKILL.md`.** Reads a section's `README.md` (prerequisites, the
+  Order sequence, the next-section pointer) plus `theory.md`/`practice.md`/`validation.md`/
+  `quiz.md`, and paces the learner through them: theory heading → the challenge(s) that build
+  on it → next heading, ending with pointers to `/check N.K` and `/quiz N.K`. It only
+  sequences — it does not teach Socratically (`/mentor`'s job) or grade correctness
+  (`/check`'s job), and never writes to `workspace/` or any status field.
+- **New practice-philosophy clause (`skills/conventions/SKILL.md` §2).** Every worked
+  example and challenge in `practice.md` now carries a `**Builds on:** theory.md §
+  "<heading>"` line naming the theory.md heading(s) it draws on — the data `/study` uses to
+  interleave precisely instead of guessing. `agents/section-drafter.md` now writes this tag;
+  `agents/critic-pedagogy.md` now FAILs a missing tag or one naming a heading absent from
+  `theory.md`; `skills/author/references/generation-pipeline.md`'s critic-pedagogy summary
+  mentions it. Sections generated before this change lack the tag — `/study` detects that and
+  falls back to the coarser `README.md` Order sequence for them, so no existing topic needs
+  migration.
+- **Trigger-phrase fix.** `/mentor`'s description previously claimed "walk me through this",
+  which is genuinely ambiguous between on-demand help and paced sequencing. Moved that phrase
+  (and its variants) to `/study`; `/mentor` now lists "explain N.K to me" instead, and each
+  skill's guardrails point at the other for the case it doesn't handle.
+- **`README.md`** command table gains a `/study N.K` row (between `/author` and `/check`);
+  the daily-loop walkthrough shows `/study 1.1` right after `/author 1.1`; the Practice
+  philosophy bullet under "What makes the content different" notes the new theory-linking tag.
+- *Why:* learner feedback (from `learn-aws-ion`, via a pasted `/evolve` brief) was that the
+  plugin "generates content and leaves a user 1-to-1 with it — it doesn't feel like a guided
+  agentic learning flow." `/mentor` already covered on-demand help, but nothing paced a
+  learner *through* a section step by step. The precise variant (tagged theory↔challenge
+  links, chosen over a purely heuristic file-order pacing) was picked deliberately: the
+  heuristic alone risks silently mispairing a challenge with the wrong concept, which is worse
+  for a first-time learner than a well-labeled coarse fallback.
+
 ## [0.6.0] — 2026-07-06
 
 Added a root `CLAUDE.md` — the plugin repo's own operating manual — so its maintenance

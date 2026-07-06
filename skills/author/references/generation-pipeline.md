@@ -47,7 +47,7 @@ navigational and not judged) from the section dir it is given:
   <date>" phrasing for volatile facts.
 - `critic-depth` — the six depth-standard elements per concept, Origins & evolution hardest.
 - `critic-pedagogy` — challenge-based practice, ≤2 worked examples, verifiable behavior,
-  hint blocks, 1–2 h sizing.
+  hint blocks, the theory↔practice `Builds on:` tag, 1–2 h sizing.
 
 Each returns `PASS` or a numbered objection list.
 

@@ -3,8 +3,9 @@ name: mentor
 description: >-
   Start an interactive Socratic mentoring session scoped to a section, a module, or the whole
   topic. Guides the learner to derive answers — never hands out solution bodies — and
-  respects the spend cap when proposing experiments. Use when the user says "mentor me",
-  "help me understand N.K", "I'm stuck on X", "walk me through this", or runs /mentor [N.K|N].
+  respects the spend cap when proposing experiments. On-demand help when stuck, not a paced
+  sequence through a section's files (that's /study). Use when the user says "mentor me",
+  "help me understand N.K", "I'm stuck on X", "explain N.K to me", or runs /mentor [N.K|N].
 argument-hint: "[N.K | N | (empty for general)]"
 ---
 
@@ -45,3 +46,5 @@ needs it. Don't preload the whole repo.
   the result.
 - Don't edit their `workspace/` files or the section content. If a real gap surfaces that
   belongs in the deck, suggest they `/quiz` or note it for `/checkpoint`.
+- If the learner wants a paced sequence through a whole section's files instead of help with
+  a specific sticking point, point them to `/study N.K` instead.
