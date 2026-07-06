@@ -168,8 +168,9 @@ requires a topic `CLAUDE.md` changelog entry recording date, what, and why.
 - **Adjacent-expertise contrasts.** Use the contrasts recorded in the topic `CLAUDE.md`
   (CQ's Django↔FastAPI contrasts generalized) to teach by leverage — explain the new
   thing against what the learner already knows deeply, including for non-code topics.
-- **Disposable vs persistent artifacts.** `theory.md`, `practice.md`, `validation.md`,
-  and `quiz.md` are regenerable and disposable. The topic `CLAUDE.md`, `roadmap.md`,
+- **Disposable vs persistent artifacts.** `README.md`, `theory.md`, `practice.md`,
+  `validation.md`, and `quiz.md` (the section drafter's five artifacts) are regenerable and
+  disposable. The topic `CLAUDE.md`, `roadmap.md`,
   each module `README.md` (section plan + learner notes), and everything under
   `retention/` and `workspace/` PERSIST. Never overwrite a persistent artifact to fix a
   disposable one.

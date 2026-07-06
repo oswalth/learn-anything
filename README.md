@@ -258,8 +258,8 @@ Once a topic's roadmap is approved, the rhythm per module is:
 
 ```text
 /plan-module 1     →  break approved module 1 into 1–2 h sections (cheap, no content yet)
-/author 1.1        →  generate section 1.1 (theory + practice + validation + quiz), via the critic quorum
-                      … read theory.md, then do practice.md in workspace/ …
+/author 1.1        →  generate section 1.1 (README + theory + practice + validation + quiz), via the critic quorum
+                      … start at README.md, then theory.md, then practice.md in workspace/ …
 /check 1.1         →  review your work against the section's criteria (never rewrites your code)
 /quiz 1.1          →  free-recall quiz; misses become spaced-repetition cards
 /recall            →  daily: review the cards that are due
@@ -374,6 +374,7 @@ learn-anything/
 ├── .claude-plugin/
 │   ├── plugin.json        # the plugin manifest: name, version (semver), description
 │   └── marketplace.json   # the marketplace manifest that makes it installable
+├── CLAUDE.md              # how to maintain THIS repo: versioning, changelog, skill/agent rules
 ├── CHANGELOG.md           # every /evolve change: date, what, why
 ├── README.md              # this file
 ├── SPEC.md                # full design, decision record, command contracts (frozen + amended)

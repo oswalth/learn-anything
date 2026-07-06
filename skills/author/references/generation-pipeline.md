@@ -4,7 +4,7 @@ The authoritative procedure `/author N.K` follows for one section. The shape is 
 drafter + parallel specialist critics** with a **revise-until-pass loop** (D12).
 
 ```
-section-drafter ──► draft (theory / practice / validation / quiz)
+section-drafter ──► draft (README / theory / practice / validation / quiz)
         ▲                    │
         │         ┌──────────┼──────────┬──────────────┐
         │         ▼          ▼          ▼              ▼
@@ -33,13 +33,14 @@ prior text-passing hand-off was truncation- and token-fragile).
 
 ## Step 1 — draft
 Invoke **`section-drafter`** (Agent tool) with the inputs and the section dir path. It **WRITES**
-the four files (`theory.md`, `practice.md`, `validation.md`, `quiz.md`) directly into the section
-directory and returns a confirmation (and, on revision passes, a change summary). It does not
-paste the bodies back.
+the five files (`README.md`, `theory.md`, `practice.md`, `validation.md`, `quiz.md`) directly into
+the section directory and returns a confirmation (and, on revision passes, a change summary). It
+does not paste the bodies back.
 
 ## Step 2 — critique in parallel
 Invoke all four critics **in a single message so they run concurrently**; each **READS** the four
-files from the section dir it is given:
+content files (`theory.md`, `practice.md`, `validation.md`, `quiz.md` — not `README.md`, which is
+navigational and not judged) from the section dir it is given:
 - `critic-accuracy` — correctness; runs code where the environment allows; checks exercise
   outputs are achievable.
 - `critic-freshness` — every version-sensitive claim vs `BASELINE.md` + live web; "as of
@@ -82,8 +83,9 @@ If after 3 iterations any objection stands:
   auto-"resolve" a critic objection.
 
 ## Step 5 — verify + bookkeeping
-- The four files (`theory.md`, `practice.md`, `validation.md`, `quiz.md`) are **already on
-  disk** — the drafter wrote them to the section directory. **Verify all four exist**, then:
+- The five files (`README.md`, `theory.md`, `practice.md`, `validation.md`, `quiz.md`) are
+  **already on disk** — the drafter wrote them to the section directory. **Verify all five
+  exist**, then:
 - Flip the **section status** to `generated` in the module `README.md` (section vocabulary:
   `planned → generated → studied`). Set the **module status** in `roadmap.md` to
   `in-progress` (from `planned`; stays `in-progress` thereafter) and update the

@@ -14,6 +14,31 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.6.0] — 2026-07-06
+
+Added a root `CLAUDE.md` — the plugin repo's own operating manual — so its maintenance
+discipline is always loaded, not just recalled when someone happens to run `/evolve` (minor —
+new always-on behavior via an auto-loaded file; no command/format change).
+
+- **Added `CLAUDE.md`** at the repo root: the one-hard-rule statement that all changes go
+  through `/evolve`/`/retro`, the version-bump + changelog requirement (with the semver
+  table), the "README must move in lockstep" rule (with a grep to catch stale command names),
+  a condensed pointer to the skill/agent authoring rules in
+  `skills/evolve/references/authoring-guide.md` (not duplicated), the blast-radius-check
+  reminder, a note that `SPEC.md` is a frozen decision record the code/changelog supersede,
+  the no-bundled-example-topic rule, and a repo map. Explicitly distinguishes itself from the
+  topic-repo `CLAUDE.md` template in `skills/kickoff/assets/CLAUDE.md`, which is a different
+  document for a different audience.
+- **`README.md`** repository-layout tree now lists `CLAUDE.md`.
+- **`marketplace.json`**'s mirrored `plugins[0].version` bumped alongside `plugin.json`, per
+  the new sync rule this same change documents.
+- *Why:* the plugin already had every one of these rules — scattered across `README.md`,
+  `SPEC.md §10`, `skills/evolve/references/authoring-guide.md`, and `skills/conventions/
+  SKILL.md §5` — but nothing surfaced them to a Claude session (or a human) that opens this
+  repo directly without going through `/evolve` first. A root `CLAUDE.md` is what Claude Code
+  auto-loads every session, closing that gap without duplicating the source-of-truth text
+  anywhere.
+
 ## [0.5.2] — 2026-07-06
 
 Made the plugin actually installable and documented the full lifecycle (patch — packaging +

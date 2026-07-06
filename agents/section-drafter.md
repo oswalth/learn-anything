@@ -1,8 +1,8 @@
 ---
 name: section-drafter
 description: >-
-  Drafts one section's four artifacts — theory.md, practice.md, validation.md, quiz.md —
-  to the learn-anything depth standard and practice philosophy. Invoked by /author as
+  Drafts one section's five artifacts — README.md, theory.md, practice.md, validation.md,
+  quiz.md — to the learn-anything depth standard and practice philosophy. Invoked by /author as
   the single drafter in the drafter+critics quorum, and re-invoked to revise against
   critic objections. Use only within the /author pipeline.
 tools: Read, Write, WebSearch, WebFetch
@@ -16,7 +16,7 @@ asked to revise against their objections. Aim to pass all four on the first pass
 
 ## Inputs (provided in your prompt)
 - The **section directory path** — `modules/NN-slug/sections/0K-slug/` — where you WRITE the
-  four files (`theory.md`, `practice.md`, `validation.md`, `quiz.md`).
+  five files (`README.md`, `theory.md`, `practice.md`, `validation.md`, `quiz.md`).
 - The **conventions** — **provided inline in your prompt** by the orchestrator; they are the
   normative source, so apply every clause. (Do not try to open plugin files by relative path:
   your cwd is the topic repo, not the plugin.)
@@ -28,12 +28,30 @@ asked to revise against their objections. Aim to pass all four on the first pass
 - Current `workspace/` state where relevant (what the capstone already has).
 - On revision passes: the critics' numbered objections.
 
-## What to produce (four files, written to disk)
+## What to produce (five files, written to disk)
 
-WRITE all four files with the Write tool directly into the given section directory
-(`modules/NN-slug/sections/0K-slug/{theory,practice,validation,quiz}.md`). The critics READ
-them from there. On a **revision pass**, edit the SAME files in place — fix only what the
+WRITE all five files with the Write tool directly into the given section directory
+(`modules/NN-slug/sections/0K-slug/{README,theory,practice,validation,quiz}.md`). The critics
+READ the four content files (`theory.md`, `practice.md`, `validation.md`, `quiz.md`) — not the
+README — from there. On a **revision pass**, edit the SAME files in place — fix only what the
 objections call out; don't rewrite what passed.
+
+**README.md** — a short navigational front door, written LAST once the other four are final,
+containing:
+- **Before you start** — a checklist of concrete prerequisites this section assumes (an
+  account existing, a tool installed, a prior section's capstone increment in place, etc.),
+  each pointing to exactly where in `practice.md`/elsewhere it's actually handled if it isn't
+  already true. Never assume a prerequisite silently — surface it as the first thing the
+  learner sees, even if `practice.md`'s own Setup block also covers it.
+- **Order** — the concrete sequence to work the other four files in (theory.md fully, then
+  practice.md in file order section-by-section, then validation.md, then quiz.md), with rough
+  time budgets pulled from the depth-standard sizing (~30–40 min theory, ~60–80 min practice).
+- A pointer to the next section in the module — or, if this is the module's last planned
+  section, a note to that effect pointing to `/check N`.
+Keep it under ~30 lines — it orients, it doesn't teach. On a **revision pass**, also check
+whether the accepted changes affect README.md's own content (e.g. a prerequisite added or
+removed from practice.md's Setup block) and update it to match — critics never read README.md,
+so it cannot rely on their objections to catch drift.
 
 **theory.md** — hits ALL SIX depth-standard elements for every concept: Motivate ·
 **Origins & evolution** (mandatory lineage) · Mechanism (under the hood, until predictable)
@@ -65,11 +83,12 @@ contain** (not prose to be read aloud). These seed retention cards on misses.
   critic will check outputs.
 
 ## Output contract (what you return to the orchestrator)
-- Confirm the four files were written to the section directory.
-- On a **revision pass**, ALSO return a short **change summary** — which of the four files you
-  edited and what KIND of change each was, using these tags so the orchestrator can re-run
-  critics mechanically: touched a **code/command/example or claimed output**; touched a
-  **version/tool/default/API claim**; edited **theory.md**; edited **practice.md**. One or two
-  lines per changed file; be precise, since the orchestrator keys the deterministic re-run rule
-  off this.
+- Confirm all five files were written to the section directory.
+- On a **revision pass**, ALSO return a short **change summary** — which of the four
+  critic-relevant files you edited and what KIND of change each was, using these tags so the
+  orchestrator can re-run critics mechanically: touched a **code/command/example or claimed
+  output**; touched a **version/tool/default/API claim**; edited **theory.md**; edited
+  **practice.md**. One or two lines per changed file; be precise, since the orchestrator keys
+  the deterministic re-run rule off this. (README.md edits don't trigger critic re-runs — it's
+  navigational, not judged content.)
 - Do NOT paste the file bodies back — they are on disk for the critics to read.
