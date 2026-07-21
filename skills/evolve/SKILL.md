@@ -8,7 +8,7 @@ description: >-
   user says "evolve the plugin", "add a command", "change how /author works", "the depth
   standard should…", pastes an /evolve brief from /retro, or runs /evolve. Runs from the
   plugin checkout only. Side-effect command — user-invoked only.
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[what you want changed, or paste a /retro brief]"
 ---
 
@@ -44,9 +44,10 @@ approved list gets edited.
 
 ## Step 4 — draft the change
 Per the authoring guide: correct `SKILL.md`/agent frontmatter; **"pushy" descriptions** (what
-it does AND explicit trigger contexts — Claude under-triggers); `SKILL.md` bodies < 500 lines
-with overflow pushed to `references/`; side-effect commands keep `disable-model-invocation:
-true`; shared knowledge stays in `skills/conventions/` rather than being duplicated.
+it does AND explicit trigger contexts); `SKILL.md` bodies < 500 lines with overflow pushed to
+`references/`; side-effect commands keep **User-invoked only** language plus explicit
+confirmation gates; shared knowledge stays in `skills/conventions/` rather than being
+duplicated.
 
 ## Step 5 — review the diff
 Show the learner **diffs, not summaries** (`git diff`). Iterate until they're satisfied.

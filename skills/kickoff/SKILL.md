@@ -7,7 +7,7 @@ description: >-
   scaffolding. Use when the user says "kickoff", "start a new topic", "I want to learn
   X", "set up a learning repo for X", or runs /kickoff in an empty directory. This is a
   side-effect command (creates files, spends tokens on web research) — user-invoked only.
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[topic name (optional)]"
 ---
 
@@ -28,13 +28,14 @@ scaffolding anything else.
 - **HARD STOP at the roadmap (D8).** Do NOT scaffold `modules/`, `retention/`, or
   `workspace/`, and do NOT generate any section content, until the learner *explicitly*
   approves the roadmap. The only files you create before approval are `CLAUDE.md`,
-  `BASELINE.md`, `ENVIRONMENT.md`, and `roadmap.md`.
+  `BASELINE.md`, `ENVIRONMENT.md`, and `roadmap.md`; when running under Codex, also create
+  `AGENTS.md` from `assets/AGENTS.md` with the same topic facts.
 - Follow the **full question script** in
   [`references/interview-script.md`](references/interview-script.md) — it has the exact
   questions per phase. This file is the overview; the script is the detail.
 - Use the process taxonomy + selection heuristics in
   [`references/process-types.md`](references/process-types.md) for Phase 5.
-- Use the skeletons in [`assets/`](assets/) as the exact structure for the four files.
+- Use the skeletons in [`assets/`](assets/) as the exact structure for the files.
 
 ## Phases
 
@@ -86,6 +87,8 @@ Work through these in order. Detailed questions live in the interview script.
 - Use `assets/CLAUDE.md`, `assets/BASELINE.md`, `assets/ENVIRONMENT.md`, and
   `assets/roadmap.md` as templates. Fill every placeholder; delete none of the required
   sections.
+- In Codex, also use `assets/AGENTS.md` as the Codex-facing project instruction template.
+  Keep its topic facts in sync with `CLAUDE.md`.
 - The topic `CLAUDE.md` records the **plugin dependency**: the marketplace repo
   `oswalth/learn-anything`, the restore commands (`/plugin marketplace add …` +
   `/plugin install learn-anything@learn-anything`), and the minimum plugin version (the

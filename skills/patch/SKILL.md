@@ -8,7 +8,7 @@ description: >-
   claims, freshness for outdated facts, depth for thin coverage) before finishing. Mutates
   section content, so it is user-invoked only: /patch N.K "what's wrong or what needs more
   depth".
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "N.K \"note describing the correction or depth request\""
 ---
 

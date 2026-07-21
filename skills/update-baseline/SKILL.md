@@ -6,7 +6,7 @@ description: >-
   may invalidate, offering regeneration. Use when the user says "update the baseline", "check
   for new versions", "is anything stale", or runs /update-baseline. Side-effect command (web
   research, file writes) — user-invoked only.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # /update-baseline — re-verify pinned versions and flag staleness

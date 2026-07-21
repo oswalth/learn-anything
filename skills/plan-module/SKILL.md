@@ -6,7 +6,7 @@ description: >-
   (id, goal, status) into modules/NN-slug/README.md. Cheap — no content generation. Use when
   the user says "plan module N", "break module N into sections", or runs /plan-module N.
   Refuses if the module is not yet approved. User-invoked only.
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "N (module number)"
 ---
 

@@ -11,7 +11,7 @@ description: >-
   roadmap", "redo the roadmap", "update the roadmap for my new goal/environment", or runs
   /replan-roadmap. Re-gates at approval like /kickoff's roadmap step. Side-effect command
   (web research, mutates roadmap.md/CLAUDE.md) — user-invoked only.
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[what changed, optional — e.g. \"AWS account already created\", \"goal is now X\", \"just refresh with latest conventions\"]"
 ---
 

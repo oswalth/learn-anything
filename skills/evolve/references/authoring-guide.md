@@ -16,7 +16,7 @@ conventions.
 name: <kebab-case, matches the directory>
 description: >-
   <what it does> AND <explicit trigger contexts>.  # see "pushy descriptions" below
-disable-model-invocation: true    # for side-effect / cost-incurring / mutating commands
+disable-model-invocation: false    # Codex-valid; use description/body gates for side effects
 argument-hint: "N.K | N"          # optional UI hint for expected args
 ---
 ```
@@ -25,24 +25,19 @@ argument-hint: "N.K | N"          # optional UI hint for expected args
   matching, so front-load them. Claude **under-triggers** — be a little **pushy**: state what
   the command does *and* concrete "use when the user says …" phrasings. Every command skill in
   this plugin follows that pattern; match it.
-- **`disable-model-invocation: true`** on anything that spends real tokens, calls the web, or
-  mutates files/the plugin. The principle: **side-effecting / costly / mutating ⇒
-  `disable-model-invocation: true`** (the learner must explicitly trigger it); **cheap /
-  interactive / read-mostly ⇒ allow model invocation** so the pushy description earns its keep
-  and natural phrasing ("quiz me", "review my flashcards", "check my work") auto-triggers it.
-  In this plugin the split is:
-  - **User-invoked only** (seven side-effecting commands, keep the flag): `kickoff`
-    (scaffolds files, heavy web research), `author` (drafter + 4 critics, serious token
-    spend), `plan-module` (mutates roadmap/module status), `replan-roadmap` (web research +
-    mutates roadmap.md/CLAUDE.md via the drafter+judge quorum), `update-baseline` (web
-    research + mutates BASELINE/changelog), `retro` (mutates topic files, emits evolve
-    briefs), and `evolve` (mutates the plugin itself).
-  - **Model-invocable** (five interactive commands, no flag): `mentor`, `quiz`, `recall`,
-    `check`, `checkpoint` — read-mostly with no irreversible cost (`check`/`checkpoint` only
-    advance status on explicit learner confirmation and never touch workspace code), so
-    auto-triggering from natural language is a feature.
-  - The `conventions` knowledge skill is likewise Claude-invocable (no flag) so drafters and
-    critics can pull it.
+- **Trigger discipline.** Codex validation rejects the old Claude-only
+  `disable-model-invocation: true` value, so shared skills use `disable-model-invocation:
+  false` when the field is present. Side-effecting, costly, or mutating commands must enforce
+  user intent in two places:
+  - Put **User-invoked only** / **Side-effect command** language in the first 1,500 chars of
+    the description.
+  - Confirm before overwriting files, spending substantial tokens, doing broad web research,
+    or mutating topic/plugin state.
+  In this plugin that user-invoked-only set is: `kickoff`, `author`, `plan-module`,
+  `replan-roadmap`, `update-baseline`, `patch`, `retro`, and `evolve`.
+- **Naturally invocable** skills: `mentor`, `quiz`, `recall`, `check`, `checkpoint`, and the
+  `conventions` knowledge skill remain safe to trigger from natural language, with any status
+  changes still requiring explicit confirmation where the skill says so.
 - Arguments arrive as `$ARGUMENTS` (all), `$0`/`$1`/… (positional), or named via an
   `arguments:` list. Command bodies here read `$ARGUMENTS`/`$0` (e.g. `N.K`).
 

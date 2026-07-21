@@ -72,11 +72,12 @@ these are the load-bearing points to keep in your head:
 
 - **Frontmatter `description` is the trigger mechanism** — Claude under-triggers, so state
   what the command does *and* explicit "use when the user says…" phrasings.
-- **`disable-model-invocation: true`** ⇔ side-effecting / costly / mutating (`kickoff`,
-  `author`, `plan-module`, `update-baseline`, `retro`, `evolve`). Omit it ⇔ cheap /
-  interactive / read-mostly (`mentor`, `quiz`, `recall`, `check`, `checkpoint`, and the
-  `conventions` knowledge skill). Get this wrong and either Claude auto-runs something that
-  spends real tokens/money, or a safe command stops responding to natural phrasing.
+- **Codex-compatible trigger discipline:** Codex validation rejects the old Claude-only
+  `disable-model-invocation: true` value, so side-effecting / costly / mutating skills use
+  `disable-model-invocation: false` and carry **User-invoked only** / **Side-effect command**
+  language in their descriptions and confirmation gates in their bodies. Cheap /
+  interactive / read-mostly skills (`mentor`, `quiz`, `recall`, `check`, `checkpoint`, and
+  the `conventions` knowledge skill) remain naturally invocable.
 - **Progressive disclosure** — `SKILL.md` bodies `< 500` lines; push detail into
   `references/*.md`; reusable file skeletons into `assets/`.
 - **One skill = one job.** Shared knowledge (the depth standard, practice philosophy,

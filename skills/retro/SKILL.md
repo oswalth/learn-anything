@@ -6,7 +6,7 @@ description: >-
   per-topic overrides) are applied directly with a changelog entry; plugin-level ideas are
   emitted as a ready-to-paste /evolve brief, never applied here. Use when the user says
   "retro", "this isn't working", "the sections are too long", or runs /retro. User-invoked.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # /retro — improve THIS topic (and route plugin ideas to /evolve)

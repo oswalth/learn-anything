@@ -14,6 +14,32 @@ Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.j
 
 Major bumps MUST include a migration note for existing topic repos.
 
+## [0.13.0] — 2026-07-13
+
+Added Codex support while keeping the existing Claude Code plugin layout intact. Minor —
+new packaging and runtime surface for Codex; no breaking changes to existing topic repos.
+
+- **`.codex-plugin/plugin.json`.** Added a Codex plugin manifest that points at the shared
+  `skills/` directory and exposes Codex UI metadata.
+- **`skills/*.md`.** Changed side-effecting skills from the Claude-only
+  `disable-model-invocation: true` flag to Codex-valid `false`; the "user-invoked only"
+  behavior remains stated in descriptions and command bodies.
+- **`.agents/plugins/marketplace.json`.** Added a repo-local Codex marketplace named
+  `learn-anything-local` for one-repo local installation and testing.
+- **`AGENTS.md`, `skills/kickoff/assets/AGENTS.md`.** Added Codex-facing project
+  instructions for this plugin checkout and for generated topic repos.
+- **`.codex/agents/*.toml`.** Added Codex-native versions of the section drafter,
+  roadmap drafter/judge, and four critic roles.
+- **`skills/codex-adapter/SKILL.md`.** Added a compatibility skill that maps remaining
+  Claude-era terms (`CLAUDE.md`, `CLAUDE_PLUGIN_ROOT`, `Agent tool`, `WebSearch`,
+  `opus`/`sonnet`/`haiku`) to Codex concepts.
+- **`docs/CODEX.md`, `README.md`, `skills/kickoff/SKILL.md`.** Documented local Codex
+  installation and usage, and taught kickoff that Codex topics should create `AGENTS.md`
+  alongside the existing `CLAUDE.md` compatibility record.
+- **Not done, and why:** the shared skill bodies were not deeply rewritten to remove every
+  Claude-specific term. The Codex adapter now provides the translation layer; behavior-level
+  rewrites should happen incrementally after smoke-testing each command in Codex.
+
 ## [0.12.0] — 2026-07-06
 
 Cut token/dollar cost across the plugin without cutting detection capability. Learner ask:

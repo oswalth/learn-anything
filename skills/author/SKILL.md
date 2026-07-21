@@ -11,7 +11,7 @@ description: >-
   Critic model (default sonnet) and max revise iterations (default 2, `--fast` for 0) are
   overridable per run via `model=` and `iterations=` args. Refuses on modules that aren't
   approved/planned. Side-effect command (spends tokens, writes files) — user-invoked only.
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "N.K | N  [model=opus|sonnet|haiku] [iterations=0-3 | --fast]"
 ---
 

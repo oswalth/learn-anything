@@ -19,6 +19,7 @@ Mastery"). Its conventions are treated as validated-by-usage defaults.
 - [1. Install the plugin](#1-install-the-plugin)
 - [2. Update the plugin](#2-update-the-plugin)
 - [3. Manage the plugin (list, disable, uninstall)](#3-manage-the-plugin-list-disable-uninstall)
+- [Using with Codex](#using-with-codex)
 - [4. Set up a learning repo (per topic)](#4-set-up-a-learning-repo-per-topic)
 - [5. The daily loop + full command reference](#5-the-daily-loop--full-command-reference)
 - [6. The improvement loop: /retro → /evolve](#6-the-improvement-loop-retro--evolve)
@@ -183,6 +184,38 @@ Installed plugins are cached under `~/.claude/plugins/`; added marketplaces are 
   }
 }
 ```
+
+## Using with Codex
+
+This repo can also be used as a Codex plugin from the same checkout. Codex-specific files
+live beside the Claude Code files:
+
+```text
+.codex-plugin/plugin.json        # Codex plugin manifest; points at shared skills/
+.agents/plugins/marketplace.json # repo-local Codex marketplace: learn-anything-local
+AGENTS.md                        # Codex instructions for this plugin checkout
+.codex/agents/*.toml             # Codex versions of the drafter/judge/critic roles
+skills/codex-adapter/SKILL.md    # translation layer for remaining Claude-era terms
+docs/CODEX.md                    # install and usage examples
+```
+
+Local install from this checkout:
+
+```bash
+codex plugin marketplace add /absolute/path/to/learn-anything
+codex plugin list --marketplace learn-anything-local --available --json
+codex plugin add learn-anything@learn-anything-local
+```
+
+Start a new thread after installing so Codex picks up the plugin skills. For kickoff,
+authoring, baseline updates, and freshness checks, run Codex with web search enabled:
+
+```bash
+codex --search
+```
+
+Then ask naturally, for example: "Use the learn-anything kickoff skill to start a new topic
+for Go." More examples are in [`docs/CODEX.md`](docs/CODEX.md).
 
 ---
 
@@ -393,8 +426,15 @@ learn-anything/
 ├── .claude-plugin/
 │   ├── plugin.json        # the plugin manifest: name, version (semver), description
 │   └── marketplace.json   # the marketplace manifest that makes it installable
+├── .codex-plugin/
+│   └── plugin.json        # Codex plugin manifest
+├── .agents/plugins/
+│   └── marketplace.json   # repo-local Codex marketplace
+├── .codex/agents/         # Codex-native drafter/judge/critic definitions
+├── AGENTS.md              # Codex-facing maintenance overlay
 ├── CLAUDE.md              # how to maintain THIS repo: versioning, changelog, skill/agent rules
 ├── CHANGELOG.md           # every /evolve change: date, what, why
+├── docs/CODEX.md          # Codex install + usage examples
 ├── README.md              # this file
 ├── SPEC.md                # full design, decision record, command contracts (frozen + amended)
 ├── skills/                # slash commands + the conventions knowledge skill
