@@ -8,11 +8,36 @@ history of the system's own evolution.
 
 Versioning is semver (see [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
 
-- **major** — breaking format changes to topic-repo files (existing topics need migration).
+- **major** — breaking command, packaging, or topic-repo format changes.
 - **minor** — new commands or new behavior.
 - **patch** — fixes.
 
 Major bumps MUST include a migration note for existing topic repos.
+
+## [1.0.0] — 2026-07-21
+
+Added GitHub Copilot support and made every generation or maintenance workflow single pass.
+Major — removes public `/author` tuning arguments and the reviewer/judge agent surface.
+
+- **Lean generation.** `/kickoff` and `/replan-roadmap` now invoke one roadmap drafter;
+  `/author` invokes one section drafter per section. Removed all four critic agents,
+  `roadmap-judge`, the generation review loop, model overrides, and iteration controls.
+- **Lean maintenance.** `/patch` makes one bounded correction. `/evolve` performs one scoped
+  edit pass and one cheap structural check; it no longer requires diff-review rounds or a
+  scratch-topic smoke test.
+- **Copilot packaging.** Added root `plugin.json`, `.github/plugin/marketplace.json`, two
+  Copilot-native drafter agents, and `skills/copilot-adapter/SKILL.md`. The plugin installs
+  from `https://github.com/oswalth/learn-anything` in VS Code or from the
+  `oswalth/learn-anything` marketplace in Copilot CLI.
+- **Cross-tool consistency.** `/evolve` must keep Claude, Codex, and Copilot manifests and
+  marketplaces synchronized. Topic templates now include URL restore instructions for all
+  three tools.
+- **Documentation.** Replaced the Claude-first README and separate Codex guide with one
+  standardized install, verify, use, update, and remove flow per tool.
+- **Migration.** Existing topic repositories and generated content need no file migration.
+  Stop passing `model=`, `iterations=`, or `--fast` to `/author`; those options were removed.
+  Any automation that called critic or roadmap-judge agents must call the relevant drafter or
+  command directly.
 
 ## [0.13.0] — 2026-07-13
 

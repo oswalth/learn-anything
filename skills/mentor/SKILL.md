@@ -48,7 +48,7 @@ needs it. Don't preload the whole repo.
   belongs in the deck, suggest they `/quiz` or note it for `/checkpoint`.
 - If the learner flags a specific claim in the section as wrong or outdated, or wants a
   bounded depth-add to one concept, don't edit it yourself — point them to
-  `/patch N.K "..."` for an immediate, critic-verified fix. Reserve `/author N.K` for
+  `/patch N.K "..."` for an immediate bounded fix. Reserve `/author N.K` for
   broader rework.
 - If the learner wants a paced sequence through a whole section's files instead of help with
   a specific sticking point, point them to `/study N.K` instead.

@@ -28,8 +28,8 @@ scaffolding anything else.
 - **HARD STOP at the roadmap (D8).** Do NOT scaffold `modules/`, `retention/`, or
   `workspace/`, and do NOT generate any section content, until the learner *explicitly*
   approves the roadmap. The only files you create before approval are `CLAUDE.md`,
-  `BASELINE.md`, `ENVIRONMENT.md`, and `roadmap.md`; when running under Codex, also create
-  `AGENTS.md` from `assets/AGENTS.md` with the same topic facts.
+  `BASELINE.md`, `ENVIRONMENT.md`, and `roadmap.md`; when running under Codex or Copilot,
+  also create `AGENTS.md` from `assets/AGENTS.md` with the same topic facts.
 - Follow the **full question script** in
   [`references/interview-script.md`](references/interview-script.md) — it has the exact
   questions per phase. This file is the overview; the script is the detail.
@@ -67,14 +67,11 @@ Work through these in order. Detailed questions live in the interview script.
    practice exercise. → write `ENVIRONMENT.md`.
 7. **Baseline pinning (D2).** Fix versions, editions, and authoritative doc URLs, each with
    a verified-on date. → write `BASELINE.md`.
-8. **Roadmap generation (D12).** Spawn **two `roadmap-drafter` agents in parallel** with the
+8. **Roadmap generation.** Spawn **one `roadmap-drafter` agent** with the
    same inputs (the `CLAUDE.md` draft + the prior-art verdict + the **conventions text
-   inlined** — read it yourself from `${CLAUDE_PLUGIN_ROOT}/skills/conventions/SKILL.md`,
-   fallback `${CLAUDE_SKILL_DIR}/../conventions/SKILL.md`; the agents run from the topic-repo
-   cwd and can't open plugin files by relative path). Then run **`roadmap-judge`** once to
-   merge them, justifying every inclusion,
-   exclusion, and ordering choice. Write `roadmap.md` with **every module `status: draft`**.
-   (Use the Agent tool; run the two drafters in a single message so they go in parallel.)
+  inlined** — read [the conventions](../conventions/SKILL.md); the agent runs from the
+  topic-repo cwd and can't open plugin files by relative path). Write its result to
+  `roadmap.md` with **every module `status: draft`**.
 9. **HARD STOP (D8).** Present the roadmap for review. Iterate conversationally on the
    learner's requests (merge/split/reorder modules, change scope) — regenerate `roadmap.md`
    as needed. **Only when the learner explicitly approves** do you: flip module statuses to
@@ -87,12 +84,12 @@ Work through these in order. Detailed questions live in the interview script.
 - Use `assets/CLAUDE.md`, `assets/BASELINE.md`, `assets/ENVIRONMENT.md`, and
   `assets/roadmap.md` as templates. Fill every placeholder; delete none of the required
   sections.
-- In Codex, also use `assets/AGENTS.md` as the Codex-facing project instruction template.
-  Keep its topic facts in sync with `CLAUDE.md`.
+- In Codex or Copilot, also use `assets/AGENTS.md` as the agent-facing project instruction
+  template. Keep its topic facts in sync with `CLAUDE.md`.
 - The topic `CLAUDE.md` records the **plugin dependency**: the marketplace repo
   `oswalth/learn-anything`, the restore commands (`/plugin marketplace add …` +
   `/plugin install learn-anything@learn-anything`), and the minimum plugin version (the
-  current version in `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`). It carries **no
+  current version in the active tool's plugin manifest). It carries **no
   conventions text** — those live in the plugin.
 - Copy the "Keep this file honest" changelog block verbatim into `CLAUDE.md`.
 

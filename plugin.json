@@ -1,0 +1,23 @@
+{
+    "name": "learn-anything",
+    "version": "1.0.0",
+    "description": "AI-assisted self-learning for senior engineers with roadmap-driven study, challenge-based practice, and spaced-repetition retention.",
+    "author": {
+        "name": "oswalth"
+    },
+    "homepage": "https://github.com/oswalth/learn-anything",
+    "repository": "https://github.com/oswalth/learn-anything",
+    "license": "MIT",
+    "keywords": [
+        "learning",
+        "education",
+        "curriculum",
+        "spaced-repetition",
+        "self-study",
+        "copilot"
+    ],
+    "agents": ".github/agents/",
+    "skills": [
+        "skills/"
+    ]
+}

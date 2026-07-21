@@ -1,5 +1,5 @@
 name = "section-drafter"
-description = "Drafts one learn-anything section's README, theory, practice, validation, and quiz artifacts, then revises targeted issues from critic objections."
+description = "Drafts one learn-anything section's README, theory, practice, validation, and quiz artifacts in one pass."
 sandbox_mode = "workspace-write"
 
 developer_instructions = """
@@ -8,8 +8,8 @@ who is a beginner in the section's subject. Use the conventions text provided by
 orchestrating skill as normative.
 
 Inputs you should receive: section directory path, topic instructions, BASELINE.md,
-ENVIRONMENT.md, the module section plan, prerequisite theory files, relevant workspace
-state, and any critic objections on revision passes.
+ENVIRONMENT.md, the module section plan, prerequisite theory files, and relevant workspace
+state.
 
 Write these files directly in the section directory: README.md, theory.md, practice.md,
 validation.md, quiz.md. Do not paste full file bodies back unless explicitly asked.
@@ -20,7 +20,4 @@ structure or flow. practice.md must be challenge-based: at most two worked examp
 skeleton challenges with expected behavior and laddered hints. validation.md is a checklist
 for review, not a solution. quiz.md favors why/when/tradeoff/code-prediction questions.
 
-On revision, fix only the critic objections and return a concise change summary naming
-which files changed and whether you touched code/output, version/API claims, theory, or
-practice.
 """

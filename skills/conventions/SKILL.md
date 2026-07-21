@@ -4,9 +4,9 @@ description: >-
   The normative conventions for all learn-anything learning content: the Content depth
   standard, the challenge-based Practice philosophy, the evolution-lens rule, and the
   changelog discipline. This is a KNOWLEDGE skill, not a command — read it (or the
-  specific section named) whenever you generate, critique, validate, mentor, or reason
+   specific section named) whenever you generate, validate, mentor, or reason
   about the QUALITY of theory/practice/validation/quiz content, roadmaps, or retention
-  cards. Every drafter, critic, and validator in this plugin defers to this file as the
+   cards. Every drafter and validator in this plugin defers to this file as the
   single source of truth so the standard is never duplicated or drifts. Load it before
   writing or judging any learning artifact.
 ---
@@ -20,8 +20,7 @@ conventions are treated as validated-by-usage defaults.
 
 This file is the *single home* of these rules. Skills and agents reference it rather than
 restating it. When these rules change, they change here (via `/evolve`) and every consumer
-picks the change up at once. If you are a critic or drafter, cite the specific clause you
-are enforcing or applying (e.g. "depth standard: Origins & evolution block missing").
+picks the change up at once. When applying a rule, cite its specific clause when useful.
 
 The learner is a **strong senior engineer who is a genuine beginner in this section's
 subject.** Never skip a step as "obvious"; never hand-wave the mechanism. Also never
@@ -108,8 +107,8 @@ this structure:
    line separated by commas, e.g. `**Builds on:** theory.md § "A", theory.md § "B"` — never
    split across multiple tag lines. This is what lets `/study` interleave theory and practice
    precisely instead of guessing; a tag naming a heading absent from `theory.md`, or a
-   missing tag, is a `critic-pedagogy` FAIL **at generation/revision time**. Sections
-   generated before this convention existed are unaffected and are never re-judged against
+   missing tag, is a generation defect. Sections generated before this convention existed
+   are unaffected and are never re-judged against
    it — `/study` detects the absence of tags and falls back to the section's `README.md`
    Order sequence for them.
 5. **Drills / predict-then-run** exercises are welcome — they are already challenge-format.
@@ -153,8 +152,8 @@ replace it next. Enforce it as strictly as correctness:
 One **section** ≈ one **1–2 hour** study session: roughly 30–40 min of theory reading and
 60–80 min of practice. When planning modules into sections, split so each section is
 exhaustive *and* fits this budget. If a concept cannot be done justice in one session,
-it is two sections, not one crammed one. `critic-pedagogy` enforces this against generated
-sections; `/plan-module` enforces it when planning.
+it is two sections, not one crammed one. `/plan-module` enforces this when planning and the
+section drafter follows it when generating.
 
 ---
 
@@ -185,8 +184,8 @@ requires a topic `CLAUDE.md` changelog entry recording date, what, and why.
 - **Context discipline (hard rule).** Every command reads ONLY the files its contract
   lists — never "the whole repo". This keeps token cost bounded and behavior predictable.
 - **Freshness.** Version-sensitive claims are checked against the topic `BASELINE.md` and
-  current web sources; volatile facts are phrased "as of <date>". `critic-freshness`
-  owns this at generation time; `/update-baseline` re-verifies over time.
+   current web sources during generation; volatile facts are phrased "as of <date>".
+   `/update-baseline` re-verifies over time.
 - **Adjacent-expertise contrasts.** Use the contrasts recorded in the topic `CLAUDE.md`
   (CQ's Django↔FastAPI contrasts generalized) to teach by leverage — explain the new
   thing against what the learner already knows deeply, including for non-code topics.

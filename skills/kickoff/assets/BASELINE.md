@@ -1,9 +1,8 @@
 # BASELINE — {{TOPIC}}
 
 Pinned versions, editions, and authoritative sources this topic's content is written
-against. `critic-freshness` checks generated content against this table; `/update-baseline`
-re-verifies the rows over time and flags generated-but-unread sections that new versions may
-invalidate.
+against. Generation uses this table; `/update-baseline` re-verifies the rows over time and
+flags generated-but-unread sections that new versions may invalidate.
 
 Rule: **volatile facts in generated content must match this table or be phrased
 "as of <date>".**

@@ -15,7 +15,7 @@ planned or generated until the learner approves it. Each module carries a **modu
 - After approval, **any** change to this roadmap requires a `CLAUDE.md` changelog entry
   (keep-this-file-honest rule). Small edits: change directly. Larger restructuring — the
   goal/environment changed, or you want a refresh against the plugin's current conventions —
-  run `/replan-roadmap`, which regenerates through the drafter+judge quorum while protecting
+  run `/replan-roadmap`, which regenerates with one drafter pass while protecting
   modules already `approved`+ by default.
 
 (**Section** statuses — `planned` → `generated` → `studied` — live in each module's
@@ -57,8 +57,7 @@ generating) · **Source** (`generated`, or the prior-art unit it maps to).
 
 ---
 
-## Judge's rationale
+## Design rationale
 
-{{The key merge decisions from roadmap-judge: notable inclusions/exclusions and the single
-biggest ordering call, each with its reason. Preserved so the shape of the roadmap stays
-explainable later.}}
+{{Notable inclusions/exclusions and the biggest ordering call, each with its reason. Preserved
+so the shape of the roadmap stays explainable later.}}

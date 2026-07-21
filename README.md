@@ -1,448 +1,300 @@
 # learn-anything
 
-An AI-assisted self-learning system, packaged as a Claude Code plugin.
+An AI-assisted self-learning plugin for **Claude Code, Codex, and GitHub Copilot**. It builds
+depth-first learning roadmaps, generates challenge-based study sections, reviews your work,
+and maintains spaced-repetition cards in a content-only topic repository.
 
-It is built for a **senior engineer who wants advise-level depth** — understanding *how*
-things work and *why* they came to be, not just how to use them — with **challenge-based
-practice** and **spaced-repetition retention**. Topics are unbounded: Go, FastAPI, AWS,
-Kubernetes, networking — and non-code subjects like differential equations, too.
+The workflows are intentionally lean: roadmap and section generation each use one drafter
+pass, with no separate review agents, automatic revision rounds, or scratch-topic validation.
 
-The plugin generalizes a proven, hand-built learning system ("ChoreQuest / FastAPI
-Mastery"). Its conventions are treated as validated-by-usage defaults.
+## How it works
 
----
+1. Install this plugin once in your AI tool.
+2. Create one empty repository per topic.
+3. Run `/kickoff` and approve the generated roadmap.
+4. Plan, author, study, check, and quiz one section at a time.
+5. Commit the topic repository to keep your roadmap, notes, practice, and retention history.
 
-## Table of contents
-
-- [The two-artifact model](#the-two-artifact-model)
-- [Requirements](#requirements)
-- [1. Install the plugin](#1-install-the-plugin)
-- [2. Update the plugin](#2-update-the-plugin)
-- [3. Manage the plugin (list, disable, uninstall)](#3-manage-the-plugin-list-disable-uninstall)
-- [Using with Codex](#using-with-codex)
-- [4. Set up a learning repo (per topic)](#4-set-up-a-learning-repo-per-topic)
-- [5. The daily loop + full command reference](#5-the-daily-loop--full-command-reference)
-- [6. The improvement loop: /retro → /evolve](#6-the-improvement-loop-retro--evolve)
-- [7. Restore a topic on another machine](#7-restore-a-topic-on-another-machine)
-- [What makes the content different](#what-makes-the-content-different)
-- [Troubleshooting](#troubleshooting)
-- [Repository layout](#repository-layout)
-
----
-
-## The two-artifact model
-
-1. **This plugin** holds *all the machinery* — skills (slash commands), subagents, and
-   shared conventions. One repo, one source of truth. Updating the plugin updates every
-   topic at once.
-2. **Topic repos** are thin, *content-only* directories scaffolded by `/kickoff`. They
-   contain zero machinery. A topic repo **+** the plugin = a complete learning system.
-
-Why the split? The naive alternative — a template repo cloned per topic — makes every
-template improvement require N manual syncs. Here, machinery lives once in the plugin
-(edit once, applies everywhere), and topic repos hold only per-topic content, which never
-needs syncing. The trade-off: a topic repo is not self-contained. Its `CLAUDE.md` records
-the plugin's marketplace/repo and minimum version so any machine can restore the setup
-(see [§7](#7-restore-a-topic-on-another-machine)).
-
-A topic repo MAY still shadow plugin definitions with project-level `.claude/skills/` or
-`.claude/agents/` files of the same name (project scope wins) — this is how `/retro`
-proposes per-topic overrides. Promoting an override into the plugin goes through `/evolve`.
-
----
+The plugin contains the machinery. Topic repositories contain only learning state and content,
+so updating the plugin updates every topic without copying workflow files between repositories.
 
 ## Requirements
 
-- **Claude Code** with the plugin system (marketplaces). If `/plugin` isn't recognized,
-  update Claude Code first.
-- **git** available on your PATH (Claude Code clones the marketplace repo).
-- For the GitHub install path: access to `github.com/oswalth/learn-anything` via your
-  normal git auth (SSH key or `gh auth`). The repo may be private; manual installation
-  works as long as your git can read it.
+- Git
+- One or more of Claude Code, Codex, GitHub Copilot CLI, or VS Code with GitHub Copilot
+- Web access for kickoff research, baseline updates, and fast-moving topics
+- Access to `https://github.com/oswalth/learn-anything`
 
----
+## Claude Code
 
-## 1. Install the plugin
+### 1. Install from GitHub
 
-> **Key idea:** `/plugin install` does **not** take a raw repo URL. Plugins are installed
-> **from a marketplace**. This repo is *both* the marketplace and the plugin, so you first
-> **add the marketplace**, then **install the plugin from it**. Because the marketplace and
-> the plugin are both named `learn-anything`, the install target is
-> `learn-anything@learn-anything` (that's `plugin@marketplace`).
-
-### Option A — from GitHub (normal use)
+In Claude Code:
 
 ```text
 /plugin marketplace add oswalth/learn-anything
 /plugin install learn-anything@learn-anything
+/reload-plugins
 ```
 
-Note the shorthand is `owner/repo` — **not** `github.com/oswalth/...` and **not** a full
-URL. (Non-GitHub hosts need the full `https://host/owner/repo.git` form.)
-
-### Option B — from a local clone (development / offline)
+Local development fallback:
 
 ```text
 /plugin marketplace add /absolute/path/to/learn-anything
 /plugin install learn-anything@learn-anything
+/reload-plugins
 ```
 
-You can point at the directory (it must contain `.claude-plugin/marketplace.json`) or at
-the `marketplace.json` file directly.
-
-### Scope
-
-`/plugin install` installs at **user scope** by default — the plugin is then available in
-**every** directory/project you open, which is what you want (each topic lives in its own
-directory). The interactive installer lets you pick a scope; user is the default.
-
-### Verify it worked
+### 2. Verify
 
 ```text
-/plugin list           # learn-anything should show as installed + enabled
-/help                  # scroll to the plugin's commands
+/plugin list
+/help
 ```
 
-If commands don't appear immediately, run `/reload-plugins`. You should see, namespaced as
-`learn-anything:<name>` (and usually as bare `/<name>`):
+The plugin should be enabled and its commands should appear as
+`/learn-anything:<command>`; bare command names usually work when unambiguous.
 
-`kickoff` · `plan-module` · `author` · `study` · `check` · `mentor` · `quiz` · `recall` ·
-`checkpoint` · `patch` · `retro` · `update-baseline` · `evolve`
-
-### CLI equivalents (scripting / dotfiles)
-
-Every step has a non-interactive CLI form:
-
-```bash
-claude plugin marketplace add oswalth/learn-anything
-claude plugin install learn-anything@learn-anything          # --scope user (default) | project | local
-claude plugin list
-```
-
----
-
-## 2. Update the plugin
-
-**Mental model — two independent things:**
-
-- the **marketplace cache** (a local copy of `marketplace.json` listing available versions), and
-- the **installed plugin** (the version you actually run).
-
-Refreshing the marketplace does **not** by itself upgrade the installed plugin. Custom
-(non-Anthropic) marketplaces have **auto-update disabled by default**, so updating is a
-deliberate two-step:
-
-```text
-/plugin marketplace update learn-anything    # refresh the catalog from the repo
-/plugin install learn-anything@learn-anything  # reinstall to pull the new version
-/reload-plugins                              # apply in the current session (no restart needed)
-```
-
-(Under the hood, `/plugin install` over an existing install upgrades it. If you prefer an
-explicit clean swap: `/plugin uninstall learn-anything@learn-anything` then install again.)
-
-**Optional — enable auto-update** so new pushes are picked up at Claude Code startup:
-open `/plugin` → **Marketplaces** tab → select `learn-anything` → *Enable auto-update*.
-When an update lands you'll be prompted to `/reload-plugins`.
-
-**Because all machinery lives in the plugin, updating it updates every topic at once** — no
-per-topic sync. The plugin's own change history is in [`CHANGELOG.md`](CHANGELOG.md).
-
----
-
-## 3. Manage the plugin (list, disable, uninstall)
-
-```text
-/plugin                                   # interactive manager (Discover/Installed/Marketplaces/Errors)
-/plugin list                              # installed plugins (--enabled / --disabled to filter)
-/plugin marketplace list                  # added marketplaces
-
-/plugin disable learn-anything@learn-anything   # keep installed, turn off
-/plugin enable  learn-anything@learn-anything   # turn back on
-/reload-plugins                                  # apply enable/disable now
-
-/plugin uninstall learn-anything@learn-anything          # remove the plugin
-/plugin marketplace remove learn-anything                # remove the marketplace (also removes its plugins)
-```
-
-Installed plugins are cached under `~/.claude/plugins/`; added marketplaces are tracked in
-`~/.claude/plugins/known_marketplaces.json`. You normally never touch these by hand.
-
-**Team / multi-machine auto-install** — declare the marketplace and plugin in a project's
-`.claude/settings.json` so collaborators are prompted to install on trust:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "learn-anything": {
-      "source": { "source": "github", "repo": "oswalth/learn-anything" },
-      "autoUpdate": true
-    }
-  },
-  "enabledPlugins": {
-    "learn-anything@learn-anything": true
-  }
-}
-```
-
-## Using with Codex
-
-This repo can also be used as a Codex plugin from the same checkout. Codex-specific files
-live beside the Claude Code files:
-
-```text
-.codex-plugin/plugin.json        # Codex plugin manifest; points at shared skills/
-.agents/plugins/marketplace.json # repo-local Codex marketplace: learn-anything-local
-AGENTS.md                        # Codex instructions for this plugin checkout
-.codex/agents/*.toml             # Codex versions of the drafter/judge/critic roles
-skills/codex-adapter/SKILL.md    # translation layer for remaining Claude-era terms
-docs/CODEX.md                    # install and usage examples
-```
-
-Local install from this checkout:
-
-```bash
-codex plugin marketplace add /absolute/path/to/learn-anything
-codex plugin list --marketplace learn-anything-local --available --json
-codex plugin add learn-anything@learn-anything-local
-```
-
-Start a new thread after installing so Codex picks up the plugin skills. For kickoff,
-authoring, baseline updates, and freshness checks, run Codex with web search enabled:
-
-```bash
-codex --search
-```
-
-Then ask naturally, for example: "Use the learn-anything kickoff skill to start a new topic
-for Go." More examples are in [`docs/CODEX.md`](docs/CODEX.md).
-
----
-
-## 4. Set up a learning repo (per topic)
-
-Each topic gets its **own empty directory**. The plugin (installed at user scope) is visible
-there automatically — you do **not** clone or copy anything into the topic repo.
+### 3. Create and use a topic
 
 ```bash
 mkdir -p ~/learn-topics/golang
 cd ~/learn-topics/golang
-claude          # start Claude Code in this directory
+claude
 ```
 
-Then, inside Claude Code:
+Then run `/kickoff` and answer one question at a time. Approve the roadmap explicitly before
+the plugin scaffolds modules, retention, and workspace directories.
+
+### 4. Update or remove
 
 ```text
-/kickoff
+/plugin marketplace update learn-anything
+/plugin install learn-anything@learn-anything
+/reload-plugins
+
+/plugin uninstall learn-anything@learn-anything
+/plugin marketplace remove learn-anything
 ```
 
-`/kickoff` is an **interview wizard**. It asks one question at a time and, as you answer,
-writes the topic's source-of-truth files. It walks through:
+## Codex
 
-1. **Goal** — what you want to learn and the capabilities you want ("I can advise on X",
-   "build Y unaided", "solve Z-class problems"), plus pace/deadline.
-2. **Your level & adjacent expertise** — what you already know deeply that we can teach the
-   new material *against* (e.g. Django ↔ FastAPI). A first-class input.
-3. **Topic properties** — is there a canonical source? how fast does it move? what does
-   *verification* look like?
-4. **Prior-art scan** — it web-researches established curricula/books/paths (CS50, MIT OCW,
-   roadmap.sh, cert blueprints…) and gives an **adopt / adapt / generate** verdict.
-5. **Process recommendation** — a learning-process mix + a practice medium, with 2–3
-   capstone candidates where a capstone fits. You approve or override.
-6. **Environment & spend** — inventories your setup, sets a **spend cap**, writes
-   `ENVIRONMENT.md` (for cloud topics, billing alarms + teardown are the first exercise).
-7. **Baseline pinning** — pins current versions/editions/doc URLs into `BASELINE.md`.
-8. **Roadmap** — two roadmap drafters run in parallel and a judge merges them into
-   `roadmap.md` (phases → modules), every module marked `draft`.
+### 1. Install from GitHub
 
-Then it **STOPS and waits** — this is the hard gate:
+```bash
+codex plugin marketplace add oswalth/learn-anything
+codex plugin add learn-anything@learn-anything
+```
+
+Local development fallback:
+
+```bash
+codex plugin marketplace add /absolute/path/to/learn-anything
+codex plugin add learn-anything@learn-anything
+```
+
+### 2. Verify
+
+```bash
+codex plugin list
+```
+
+Start a new Codex thread after installation. Use web-enabled Codex for research-heavy commands.
+
+### 3. Create and use a topic
+
+```bash
+mkdir -p ~/learn-topics/golang
+cd ~/learn-topics/golang
+codex --search
+```
+
+Ask: `Use the learn-anything kickoff skill to start a topic for Go.` Codex loads the same
+shared skills as Claude and creates both `CLAUDE.md` and `AGENTS.md` for portability.
+
+### 4. Update or remove
+
+Use `codex plugin --help` for the update/remove commands supported by your installed Codex
+version. Re-add the plugin after updating a local checkout so its cached files are refreshed.
+
+## GitHub Copilot
+
+The same Copilot-format plugin works in **VS Code Copilot Chat** and **GitHub Copilot CLI**.
+
+### 1. Install from GitHub
+
+VS Code:
+
+1. Enable the `chat.plugins.enabled` setting if agent plugins are not already enabled.
+2. Run `Chat: Install Plugin From Source` from the Command Palette.
+3. Enter `https://github.com/oswalth/learn-anything`.
+4. Confirm the repository trust prompt.
+
+Copilot CLI:
+
+```bash
+copilot plugin install https://github.com/oswalth/learn-anything
+```
+
+VS Code automatically discovers plugins installed by Copilot CLI. Local development fallback:
+
+```bash
+git clone https://github.com/oswalth/learn-anything.git
+```
+
+Then add the checkout with VS Code's `chat.pluginLocations` setting:
+
+```json
+{
+  "chat.pluginLocations": {
+    "/absolute/path/to/learn-anything": true
+  }
+}
+```
+
+### 2. Verify
+
+VS Code:
+
+1. Open Extensions and search `@agentPlugins @installed`.
+2. Confirm `learn-anything` is enabled.
+3. Type `/` in Copilot Chat and look for `/learn-anything:kickoff`.
+
+Copilot CLI:
+
+```bash
+copilot plugin list
+```
+
+In an interactive CLI session, `/skills list` should include the learn-anything skills.
+
+### 3. Create and use a topic
+
+Create and open an empty directory in VS Code, then run `/learn-anything:kickoff` in Copilot
+Chat. In Copilot CLI:
+
+```bash
+mkdir -p ~/learn-topics/golang
+cd ~/learn-topics/golang
+copilot -i "Use the /kickoff skill to start a learn-anything topic for Go"
+```
+
+Copilot creates `CLAUDE.md` as the portable topic record and `AGENTS.md` as its native project
+instructions.
+
+### 4. Update or remove
+
+VS Code checks plugin updates with `Extensions: Check for Extension Updates`. Manage enable,
+disable, and uninstall actions in the `@agentPlugins @installed` Extensions view.
+
+```bash
+copilot plugin update learn-anything
+copilot plugin uninstall learn-anything
+```
+
+## Daily workflow
+
+The command names and behavior are the same in all three tools:
 
 ```text
-# Iterate conversationally until you're happy:
-#   "merge modules 4 and 5"
-#   "move observability earlier"
-#   "drop the gRPC module, add one on profiling"
-# Then, explicitly:
-"the roadmap is approved"
+/kickoff            interview, research, draft a roadmap, stop for approval
+/plan-module 1      split approved module 1 into 1-2 hour sections
+/author 1.1         generate five section files in one drafter pass
+/study 1.1          walk through theory and challenges interactively
+/check 1.1          review your work against validation criteria
+/quiz 1.1           run free recall and create cards for misses
+/recall             review cards that are due
+/check 1            validate the whole module and mark it done on approval
+/checkpoint         run cumulative review at a phase boundary
 ```
 
-**No section content is generated until you approve the roadmap.** On approval, `/kickoff`
-flips the modules to `approved`, scaffolds the rest of the tree
-(`modules/`, `retention/`, `workspace/`), and points you at `/plan-module 1`.
+Use `/learn-anything:<command>` where a tool requires or displays the plugin namespace.
 
-After kickoff, a topic repo looks like:
+## Command reference
+
+| Command | Purpose |
+|---|---|
+| `/kickoff` | Interview, research, generate one roadmap draft, and scaffold after explicit approval |
+| `/plan-module N` | Break an approved module into 1-2 hour sections |
+| `/author N.K` or `/author N` | Generate or regenerate section content in one drafter pass |
+| `/replan-roadmap` | Generate one revised roadmap draft while protecting started modules |
+| `/study N.K` | Interleave theory with the challenges that build on it |
+| `/check N.K` or `/check N` | Review learner work and update mastery status on confirmation |
+| `/mentor [N.K or N]` | Run a Socratic mentoring session without giving away solutions |
+| `/quiz N.K` | Run a free-recall quiz and create retention cards for misses |
+| `/recall [module N]` | Review due spaced-repetition cards |
+| `/checkpoint` | Run cumulative review and an integration challenge |
+| `/patch N.K "note"` | Make one bounded correction to generated content |
+| `/retro` | Improve the current topic and emit plugin-level evolve briefs |
+| `/update-baseline` | Re-verify pinned versions and flag potentially stale sections |
+| `/evolve` | Change this plugin in one pass and synchronize all tool packages |
+
+Mutating or research-heavy commands require explicit user intent. Re-running `/author` on
+generated or studied content asks before overwriting and resets a studied section to generated.
+
+## Topic repository
+
+After roadmap approval, a topic contains:
 
 ```text
-~/learn-topics/golang/
-├── CLAUDE.md        # topic identity: goal, level, contrasts, process mix, plugin dependency, changelog
-├── BASELINE.md      # pinned versions / editions / doc URLs (+ verified-on dates)
-├── ENVIRONMENT.md   # chosen setup, options matrix, spend cap, teardown checklist
-├── roadmap.md       # phases → modules, each with a status (the approval gate lives here)
-├── modules/         # per-module READMEs (section plans + your notes) and generated sections
-├── retention/       # spaced-repetition deck (one card per file) + review log
-└── workspace/       # where YOU build/solve — the capstone, notebooks, problem sets
+topic/
+├── CLAUDE.md        # portable topic source of truth and change history
+├── AGENTS.md        # Codex/Copilot project instructions
+├── BASELINE.md      # pinned versions, editions, and authoritative URLs
+├── ENVIRONMENT.md   # setup, budget, spend cap, and teardown checklist
+├── roadmap.md       # phases, modules, prerequisites, and module status
+├── modules/         # section plans, generated content, and learner notes
+├── retention/       # spaced-repetition cards and review log
+└── workspace/       # learner-owned code, labs, proofs, and capstone work
 ```
 
----
+Generated section files are disposable and may be regenerated. Topic instructions, roadmap,
+module notes, retention history, and workspace content are persistent.
 
-## 5. The daily loop + full command reference
+## Lean architecture
 
-Once a topic's roadmap is approved, the rhythm per module is:
+- `/kickoff` and `/replan-roadmap` call one roadmap drafter.
+- `/author` calls one section drafter per section.
+- `/patch` applies one bounded edit.
+- `/evolve` reads the affected files, edits once, runs one structural check, synchronizes all
+  manifests, and updates the changelog.
+- Quality requirements live once in `skills/conventions/SKILL.md` and are supplied directly to
+  drafters and learning workflows.
 
-```text
-/plan-module 1     →  break approved module 1 into 1–2 h sections (cheap, no content yet)
-/author 1.1        →  generate section 1.1 (README + theory + practice + validation + quiz), via the critic quorum
-/study 1.1         →  paced walkthrough: interleaves theory.md concepts with the practice.md
-                      challenges that build on them, waiting for you at each step (or work the
-                      files solo, starting at README.md)
-/check 1.1         →  review your work against the section's criteria (never rewrites your code)
-/quiz 1.1          →  free-recall quiz; misses become spaced-repetition cards
-/recall            →  daily: review the cards that are due
-# repeat /author 1.K … for each section, then:
-/check 1           →  whole-module validation; on a pass, marks module 1 done
-/checkpoint        →  at phase boundaries: cumulative review + one integration challenge
-```
-
-**All commands** (`N` = module number, `N.K` = section K of module N):
-
-| Command | What it does | Invoke |
-|---|---|---|
-| `/kickoff` | Interview → gated roadmap → scaffold a topic repo | you |
-| `/plan-module N` | Break approved module N into 1–2 h sections; re-run to re-plan (confirms before touching already-generated/studied sections) | you |
-| `/author N.K` \| `/author N` | Generate a section (or a whole module, with a cost warning) through the drafter + 4-critic quorum; re-run on an already-`generated`/`studied` section to regenerate it (confirms first — this is the regeneration path, no separate command); `model=`/`iterations=`/`--fast` tune critic tier and revise-loop depth per run | you |
-| `/replan-roadmap` | Regenerate roadmap.md through the drafter + judge quorum against updated goal/environment/conventions; protects already-approved+ modules by default | you |
-| `/study N.K` | Paced walkthrough: interleaves theory.md concepts with the practice.md challenges that build on them | you or Claude |
-| `/check N.K` \| `/check N` | Review your workspace against the section's / module's criteria; can mark section `studied` / module `done` on a pass | you or Claude |
-| `/mentor [N.K \| N]` | Socratic session; guides you to derive, never hands over solutions | you or Claude |
-| `/quiz N.K` | Post-practice free-recall quiz; misses become cards | you or Claude |
-| `/recall [module N]` | Spaced-repetition session over due cards (SM-2) | you or Claude |
-| `/checkpoint` | Cumulative, integrative review at a phase boundary | you or Claude |
-| `/patch N.K` | Bounded, on-demand fix for one flagged claim in a generated section, verified by the matching critic — no full `/author` regeneration | you |
-| `/retro` | Retrospective on this topic; applies topic fixes, emits `/evolve` briefs for plugin fixes | you |
-| `/update-baseline` | Re-verify pinned versions via web search; flag stale generated sections | you |
-| `/evolve` | Safely change the **plugin itself** (run from the plugin checkout) | you |
-
-*"Invoke: you"* = the command has side effects or costs tokens, so Claude won't auto-run it —
-type it yourself. *"you or Claude"* = safe, interactive commands Claude may also trigger when
-you say things like "quiz me" or "review my flashcards".
-
----
-
-## 6. The improvement loop: /retro → /evolve
-
-The system is designed to improve itself without quality decay:
-
-- **`/retro`** (run inside a topic) interviews you about what's working and what hurts.
-  Topic-level fixes (roadmap edits, process changes, per-topic overrides) are applied
-  directly with a changelog entry. Plugin-level ideas are emitted as a ready-to-paste
-  `/evolve` brief — never applied from inside a topic.
-- **`/evolve`** (run inside this plugin's checkout) is a guarded workflow for changing the
-  plugin itself: intent interview, minimal-scope loading, blast-radius impact check,
-  diff review, a smoke test against a throwaway scratch topic, semver bump, and a
-  `CHANGELOG.md` entry. Shipping tags the commit `v<version>`. After shipping an `/evolve`
-  change, push the plugin repo and its tags and [update](#2-update-the-plugin) it on your
-  other machines.
-
-`/retro` and `/evolve` are the *only* sanctioned mutation paths. Both end in changelog
-entries, so the system's own history stays a first-class learning artifact.
-
----
-
-## 7. Restore a topic on another machine
-
-A topic repo is content-only and depends on the plugin. To pick a topic up elsewhere:
-
-1. Install the plugin (see [§1](#1-install-the-plugin)) — the topic's `CLAUDE.md` records
-   the marketplace/repo and the **minimum plugin version** it was created against.
-   `/author`, `/plan-module`, and `/replan-roadmap` warn you if the installed plugin is
-   older than that minimum.
-2. Get the topic directory onto the machine (it's just files — clone/sync however you like).
-3. `cd` into it, start Claude Code, and continue with the [daily loop](#5-the-daily-loop--full-command-reference).
-
-No per-topic setup beyond having the plugin installed.
-
----
-
-## What makes the content different
-
-Every generated section is held to two ported conventions (see
-[`skills/conventions/SKILL.md`](skills/conventions/SKILL.md)):
-
-- **Content depth standard** — for *every* concept: motivate it · **origins & evolution**
-  (what world made it necessary, what it displaced) · mechanism (under the hood) ·
-  tradeoffs · decision guidance · show it concretely · **visualize it** (an ASCII or
-  Mermaid diagram for concepts with structure, flow, or hierarchy). Tutorial-only content is
-  a failure.
-- **Practice philosophy** — challenge-based, not copy-paste: at most two worked examples,
-  then skeletons with `# YOUR CODE HERE`, verifiable expected behavior, and hint ladders.
-  Each one links back to the exact theory.md concept it builds on, which `/study` uses to
-  interleave the two instead of handing over four static files.
-
-Freshness is enforced by a pinned `BASELINE.md` plus a mandatory web-research pass by a
-freshness critic at generation time. Post-authoring, `/patch N.K` lets a learner flag a
-single wrong or outdated claim (or a concept that's thin on depth) mid-study and get it
-fixed and re-verified immediately, without waiting for a full `/author` regeneration.
-
-**Cost defaults.** The four critics default to `sonnet` (a verification/rubric-matching
-task, and the highest-frequency call in the plugin) while `section-drafter` — the actual
-content generator — stays on `opus`. The revise loop defaults to 2 rounds, not 3. Override
-either per run with `/author N.K model=opus` or `/author N.K iterations=3` (or `--fast` for
-`iterations=0`) when a specific section warrants more rigor or speed than the default.
-
----
-
-## Troubleshooting
-
-**`Marketplace "github.com/oswalth/learn-anything" not found`** — you passed a URL to
-`/plugin install`. Add the marketplace first, then install by name:
-`/plugin marketplace add oswalth/learn-anything` → `/plugin install learn-anything@learn-anything`.
-Use the `owner/repo` shorthand, not a full `github.com/...` URL.
-
-**`/plugin install learn-anything` fails** — the install target needs the marketplace:
-it's `learn-anything@learn-anything` (`plugin@marketplace`), not just `learn-anything`.
-
-**Commands don't show up in `/help`** — run `/reload-plugins`; confirm with `/plugin list`
-that the plugin is installed **and enabled**.
-
-**A command name is shadowed** (another plugin/built-in also defines it) — use the
-namespaced form, e.g. `/learn-anything:recall`.
-
-**`/plugin marketplace add oswalth/learn-anything` fails** — the repo must be reachable by
-your git auth. Verify the branch with the `marketplace.json` is pushed
-(`git ls-remote <remote>`), and that you can clone it manually.
-
-**Installed an update but still see old behavior** — reinstalling refreshes files, but the
-session may be stale: run `/reload-plugins` (or restart Claude Code).
-
-**`/evolve` says it must run from the plugin checkout** — `/evolve` mutates the plugin, so
-run it from a git clone of this repo, not from a topic directory.
-
----
+The learner approval gate still protects roadmap scope, and `/check` still validates learner
+work. The removed review loops only judged AI-generated artifacts repeatedly.
 
 ## Repository layout
 
 ```text
 learn-anything/
-├── .claude-plugin/
-│   ├── plugin.json        # the plugin manifest: name, version (semver), description
-│   └── marketplace.json   # the marketplace manifest that makes it installable
-├── .codex-plugin/
-│   └── plugin.json        # Codex plugin manifest
-├── .agents/plugins/
-│   └── marketplace.json   # repo-local Codex marketplace
-├── .codex/agents/         # Codex-native drafter/judge/critic definitions
-├── AGENTS.md              # Codex-facing maintenance overlay
-├── CLAUDE.md              # how to maintain THIS repo: versioning, changelog, skill/agent rules
-├── CHANGELOG.md           # every /evolve change: date, what, why
-├── docs/CODEX.md          # Codex install + usage examples
-├── README.md              # this file
-├── SPEC.md                # full design, decision record, command contracts (frozen + amended)
-├── skills/                # slash commands + the conventions knowledge skill
-└── agents/                # roadmap pair, section-drafter, 4 critics
+├── plugin.json                       # Copilot plugin manifest
+├── .github/plugin/marketplace.json   # Copilot marketplace
+├── .github/agents/                   # Copilot-native drafter agents
+├── .claude-plugin/                   # Claude manifest and marketplace
+├── .codex-plugin/                    # Codex manifest
+├── .agents/plugins/marketplace.json  # Codex marketplace
+├── .codex/agents/                    # Codex-native drafter agents
+├── agents/                           # Claude-native drafter agents
+├── skills/                           # shared commands, adapters, and conventions
+├── CHANGELOG.md
+├── CLAUDE.md
+└── AGENTS.md
 ```
 
-The plugin ships **no bundled example topic** — it is a repeatable pattern, and
-`/kickoff` scaffolds a real topic repo on demand. The file layout a topic repo gets is
-documented by the skeletons in `skills/kickoff/assets/`.
+## Troubleshooting
 
-See [`SPEC.md`](SPEC.md) for the full design, decision record, and command contracts.
+**Plugin commands do not appear:** restart the tool or reload plugins, then confirm the plugin
+is installed and enabled. In VS Code, verify `chat.plugins.enabled` and search
+`@agentPlugins @installed`.
+
+**Marketplace install fails:** verify `git ls-remote https://github.com/oswalth/learn-anything`
+works with your credentials. GitHub shorthand is `oswalth/learn-anything`, not a browser URL.
+
+**A command name conflicts:** use `/learn-anything:<command>`.
+
+**An updated plugin still behaves like the old version:** update the marketplace, reinstall or
+update the plugin, and start a fresh chat/thread so cached skill instructions are reloaded.
+
+**`/evolve` refuses to run:** clone this repository and run it from the plugin checkout, not a
+topic repository.

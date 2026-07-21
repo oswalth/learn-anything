@@ -3,6 +3,10 @@
 > **Amendments:** This is the original approved design. Behavior has since evolved via
 > `/evolve`; the current source of truth is the skills/agents plus `CHANGELOG.md`. Where
 > this document and the code disagree, the code and changelog win.
+>
+> In 1.0.0, D12's quorum design was retired: roadmap generation uses one drafter, section
+> generation uses one drafter, and critic/judge/revision loops were removed. Claude Code,
+> Codex, and GitHub Copilot now share the same skills from one plugin repository.
 
 **Status:** approved design, ready to build.
 **Origin:** designed interactively with Claude (claude.ai) on 2026-07-05, generalizing the

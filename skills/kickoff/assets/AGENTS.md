@@ -1,7 +1,7 @@
 # {{TOPIC}} - learn-anything topic
 
-This is the Codex-facing project instruction file for this topic repo. The topic is
-content-only; the `learn-anything` plugin supplies the skills, agents, and conventions.
+This is the Codex- and Copilot-facing project instruction file for this topic repo. The
+topic is content-only; the `learn-anything` plugin supplies skills, agents, and conventions.
 
 - **Topic:** {{TOPIC}}
 - **Learner:** {{LEARNER - role / relevant background, one line}}
@@ -62,13 +62,16 @@ Teach the new by contrast with what I already know deeply:
 ## Plugin Dependency
 
 - **Plugin:** `learn-anything`
-- **Codex marketplace:** `learn-anything-local` when installed from this checkout.
+- **Marketplace repository:** `oswalth/learn-anything`
 - **Minimum version:** {{X.Y.Z}}
-- Restore locally with:
+- Restore from GitHub with either tool:
 
-```text
-codex plugin marketplace add /Users/vladimircarpa/pets/learn-anything
-codex plugin add learn-anything@learn-anything-local
+```bash
+codex plugin marketplace add oswalth/learn-anything
+codex plugin add learn-anything@learn-anything
+
+copilot plugin marketplace add oswalth/learn-anything
+copilot plugin install learn-anything@learn-anything
 ```
 
 ## Decisions

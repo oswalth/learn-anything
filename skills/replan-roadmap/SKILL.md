@@ -1,8 +1,8 @@
 ---
 name: replan-roadmap
 description: >-
-  Regenerate an existing topic's roadmap.md through the roadmap-drafter + roadmap-judge
-  quorum when the goal, environment, or plugin conventions have moved on since /kickoff
+  Regenerate an existing topic's roadmap.md with one roadmap-drafter pass when the goal,
+  environment, or plugin conventions have moved on since /kickoff
   (e.g. "I already have the AWS account now", "change my goal to X", "refresh the roadmap
   with the plugin's latest process"). Protects modules already
   approved/planned/in-progress/done by default — only `draft` modules and net-new modules
@@ -17,9 +17,9 @@ argument-hint: "[what changed, optional — e.g. \"AWS account already created\"
 
 # /replan-roadmap — regenerate the roadmap against updated inputs
 
-Re-draft `roadmap.md` through the same **drafter ×2 + judge** quorum `/kickoff` uses,
-against the topic's *current* inputs — while protecting modules the learner has already
-acted on. This is a **structure**-level command: it never touches section content,
+Re-draft `roadmap.md` with one roadmap-drafter pass against the topic's *current* inputs,
+while protecting modules the learner has already acted on. This is a **structure**-level
+command: it never touches section content,
 `workspace/`, or `retention/`.
 
 ## When to use vs the other regeneration paths
@@ -35,17 +35,15 @@ acted on. This is a **structure**-level command: it never touches section conten
   not, tell the learner this is a topic-repo command, not `/kickoff` (which is for brand-new
   topics and refuses on an existing one).
 - **Plugin compatibility (soft).** Same check as `/author`/`/plan-module`: compare the topic
-  `CLAUDE.md`'s recorded **Minimum version** to
-  `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`; warn (don't block) if the installed
-  plugin is older.
+  `CLAUDE.md`'s recorded **Minimum version** to the active tool's plugin manifest; warn
+  (don't block) if the installed plugin is older.
 
 ## Read (context discipline — only these)
 - Topic `CLAUDE.md`, `roadmap.md`, `modules/README.md` (the status board).
 - `BASELINE.md`/`ENVIRONMENT.md` **only** if the stated driver (Step 1) touches versions or
   the environment/budget.
-- The conventions, inlined from `${CLAUDE_PLUGIN_ROOT}/skills/conventions/SKILL.md`
-  (fallback `${CLAUDE_SKILL_DIR}/../conventions/SKILL.md`) — the agents run from the topic
-  cwd and cannot open plugin files by relative path.
+- The [conventions](../conventions/SKILL.md), inlined for the drafter — agents run from the
+  topic cwd and cannot open plugin files by relative path.
 - Do **not** read section content files, `workspace/`, or `retention/` — this command never
   touches generated content.
 
@@ -70,8 +68,8 @@ From `roadmap.md`, list every module with its status:
 Show this classification to the learner before spawning any agent, so they know upfront
 what's off-limits by default.
 
-## Step 3 — spawn the quorum
-Invoke **two `roadmap-drafter` agents in parallel** (one message), passing: the current
+## Step 3 — draft once
+Invoke **one `roadmap-drafter` agent**, passing: the current
 `CLAUDE.md` (post any Step-1 edit), the prior-art verdict from it, the conventions text
 inlined, **plus regeneration-mode inputs**:
 - The full current `roadmap.md` body.
@@ -83,12 +81,8 @@ inlined, **plus regeneration-mode inputs**:
   note under 'Protected-module conflicts' explaining what and why, and leave it unchanged in
   the roadmap body."*
 
-Then invoke **`roadmap-judge`** once with both drafts and the same regeneration-mode inputs,
-plus: merge the two drafts' Protected-module conflict notes into one de-duplicated list, and
-double-check no protected module's fields were altered in the merged output.
-
 ## Step 4 — present the diff, HARD STOP
-Diff the judge's new roadmap body against the current `roadmap.md`, module by module: call
+Diff the new roadmap body against the current `roadmap.md`, module by module: call
 out every FREE module added/removed/reordered/reworded, and list the **Protected-module
 conflicts** section verbatim if non-empty. This is a gate exactly like `/kickoff`'s D8 — do
 **not** write anything yet. Iterate conversationally on the learner's requests; unlike the
@@ -97,7 +91,7 @@ informed human decision, not a silent one. Proceed to Step 5 only on explicit ap
 
 ## Step 5 — write
 - Overwrite `roadmap.md` with the approved body. Every **protected** module keeps its exact
-  prior status — never reset it to `draft`. The judge's output starts every new/changed
+  prior status — never reset it to `draft`. The drafter's output starts every new/changed
   **free** module at `status: draft` (its own contract, same as `/kickoff`); Step 4's
   approval **is** the D8 gate for those modules, exactly like `/kickoff`'s hard stop — so on
   approval, flip every free/new module's status from `draft` to `approved` when writing.
@@ -105,7 +99,7 @@ informed human decision, not a silent one. Proceed to Step 5 only on explicit ap
   (`draft`/`approved`/`planned`/`in-progress`/`done`) with no inline annotation — strip
   anything else back to the bare keyword. Regeneration-mode context (what's protected, what
   conflicted) belongs only in this step's report to the learner and in the "Protected-module
-  conflicts" section the judge produced, never inline on a field other skills string-match
+  conflicts" section the drafter produced, never inline on a field other skills string-match
   against (`/plan-module`, `/author`, `/check` all read `roadmap.md` module status
   verbatim).
 - Update `modules/README.md`: add rows for brand-new modules; remove rows only for `draft`

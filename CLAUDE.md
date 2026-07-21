@@ -13,15 +13,15 @@ topic repo or somewhere else — the rules below don't apply there.
 
 ## The one hard rule
 
-**Every change to this repo goes through [`/evolve`](skills/evolve/SKILL.md).** Not
-ad-hoc edits, even "trivial" ones. `/evolve` (in the plugin) and `/retro` (inside a topic,
+**Every change to this repo goes through [`/evolve`](skills/evolve/SKILL.md).** `/evolve`
+(in the plugin) and `/retro` (inside a topic,
 which emits an `/evolve` brief back to here) are the **only** sanctioned mutation paths —
-see [README §6](README.md#6-the-improvement-loop-retro--evolve) and
+see [`README.md`](README.md) and
 [SPEC.md §10](SPEC.md#10-evolve--changing-the-plugin-itself-safely-d13). If you're about to
-edit a file under `skills/`, `agents/`, or `.claude-plugin/` without having gone through
-`/evolve`'s intent → scope → blast-radius → diff-review steps, stop and run `/evolve` instead
-(or at minimum apply its discipline manually: read only the affected files, grep for
-cross-references before touching anything shared, show diffs, then do the step below).
+edit plugin behavior without following `/evolve`'s scope → edit → one-check → synchronize
+steps, stop and run `/evolve` instead
+(or apply its lean discipline manually: read only affected files, search direct references,
+edit once, run one structural check, then update every manifest and the changelog).
 
 **No exception for "just docs."** A README wording fix still gets a version bump and a
 changelog line (see 0.5.2 / 0.1.1 in `CHANGELOG.md` for precedent) — the point is that the
@@ -29,15 +29,17 @@ history stays complete, not that every entry is dramatic.
 
 ## Every change ships with a version bump + changelog entry
 
-Bump `version` in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) — keep
-[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)'s `plugins[0].version`
-in sync, it's a second copy of the same number — and add an entry to
+Bump the same `version` in [`plugin.json`](plugin.json),
+[`.claude-plugin/plugin.json`](.claude-plugin/plugin.json),
+[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json),
+[`.codex-plugin/plugin.json`](.codex-plugin/plugin.json), and
+[`.github/plugin/marketplace.json`](.github/plugin/marketplace.json), then add an entry to
 [`CHANGELOG.md`](CHANGELOG.md) (newest on top) with **date · what · why**:
 
 - **patch** — a fix, or a doc/wording change with no interface or behavior change.
-- **minor** — a new command, a new agent/critic, or new/changed behavior.
-- **major** — a breaking format change to files a topic repo already has on disk (existing
-  topics need migration). **Must** include a migration note in the changelog entry.
+- **minor** — a new command, a new agent, or new/changed behavior.
+- **major** — a breaking command, packaging, or topic-repo format change. **Must** include a
+  migration note in the changelog entry.
 
 There is no path that skips this. If you can't articulate the bump size and the changelog
 line, the change isn't ready to ship.
@@ -83,22 +85,18 @@ these are the load-bearing points to keep in your head:
 - **One skill = one job.** Shared knowledge (the depth standard, practice philosophy,
   session sizing, changelog discipline) lives once in
   [`skills/conventions/SKILL.md`](skills/conventions/SKILL.md) and is *referenced*, never
-  copy-pasted, by every drafter/critic/command that needs it.
-- **Skills vs. agents load plugin-internal files differently** — a skill reads siblings by
-  absolute path (`${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md`); an agent can't open plugin
-  files by path at all, so the orchestrating skill must inline the text into its prompt. See
-  the authoring guide's "Locating plugin-internal files" section before wiring up anything
-  new that needs `conventions/`.
+  copied, by every drafter or command that needs it.
+- **Skills vs. agents load plugin-internal files differently** — a skill follows relative
+  Markdown links to siblings; an agent can't open plugin files by path at all, so the
+  orchestrating skill must inline the text into its prompt. See the authoring guide's
+  "Locating plugin-internal files" section before wiring up anything new that needs
+  `conventions/`.
 
 ## Blast-radius discipline
 
-Before editing anything under `skills/conventions/`, `skills/evolve/references/
-authoring-guide.md`, or any agent contract that other agents depend on (e.g. the drafter ↔
-critic file-handoff in `skills/author/references/generation-pipeline.md`), grep the whole
-repo for references to what you're touching and enumerate every consumer before drafting the
-diff — a conventions change alone can silently touch four critics, the drafter, `kickoff`,
-`mentor`, and `check` at once. This is `/evolve`'s Step 3; do it even if you're editing by
-hand outside the skill.
+Before editing shared conventions or agent contracts, search once for direct consumers and
+include them in the same scoped change. Do not add review loops or scratch-topic validation;
+`/evolve` performs one structural check after one edit pass.
 
 ## `SPEC.md` is a frozen decision record, not live docs
 
@@ -112,15 +110,16 @@ decisions (D1–D14) and their justifications. If a decision is later reversed, 
 
 The plugin ships **zero** example/toy topics (removed deliberately in `0.1.1` — a
 version-pinned baseline would never be re-verified, which contradicts the freshness doctrine
-the plugin exists to enforce). When `/evolve`'s smoke-test step applies (the change affects
-generation, validation, or retention behavior), test against a **throwaway scratch topic** in
-a temp dir (`mktemp -d` + `/kickoff`), never a repo-resident example. Don't reintroduce an
-`examples/` or `docs/chorequest-*` directory.
+the plugin exists to enforce). Do not reintroduce an `examples/` or
+`docs/chorequest-*` directory.
 
 ## Quick map
 
 ```text
 learn-anything/
+├── plugin.json                  # Copilot CLI manifest
+├── .github/plugin/marketplace.json # Copilot marketplace
+├── .github/agents/              # Copilot-native drafter roles
 ├── .claude-plugin/plugin.json   # name, semver version — bump every change
 ├── .claude-plugin/marketplace.json  # mirrors the same version — keep in sync
 ├── CLAUDE.md                    # this file — plugin-repo maintenance rules
@@ -134,6 +133,5 @@ learn-anything/
 │   ├── kickoff/assets/          # file-skeleton templates scaffolded INTO topic repos
 │   │                            #   (their CLAUDE.md template ≠ this file)
 │   └── <command>/SKILL.md       # one skill per slash command
-└── agents/                      # roadmap-drafter, roadmap-judge, section-drafter,
-                                  #   critic-{accuracy,freshness,depth,pedagogy}
+└── agents/                      # roadmap-drafter and section-drafter
 ```

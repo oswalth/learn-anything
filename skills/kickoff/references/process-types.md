@@ -71,7 +71,7 @@ Map the Phase 3–4 answers to a recommendation:
 | Curriculum good-but-imperfect; verdict = adapt | **Hybrid spine** |
 | Skill-like; goal = "build Y unaided" | **Project-first** (practice) |
 | Theory-like; understanding-limited; some prior base | **Socratic layer** |
-| Fast-moving field | favor companion/generate with heavy freshness-critic reliance |
+| Fast-moving field | favor companion/generate with live source checks during generation |
 | Slow, settled field with a classic text | favor source-anchored companion |
 | Verification = tests/cluster/build | capstone or project-first (practice medium = code/lab) |
 | Verification = proof/derivation/numeric-check | problem sets (Jupyter / LaTeX-markdown), Socratic layer |

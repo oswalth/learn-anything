@@ -78,7 +78,7 @@ already worked those; this command only sequences the section in front of them.
   is `/check`'s exclusive job (see its status-ownership contract).
 - If the learner flags a claim mid-walkthrough as wrong or outdated, or wants a bounded
   depth-add, don't edit it yourself — point them to `/patch N.K "..."` for an immediate,
-  critic-verified fix, then resume pacing.
+  bounded fix, then resume pacing.
 - Never invent a theory↔challenge mapping beyond what the `Builds on:` tags say or the
   `README.md` Order fallback. A wrong guess is worse than the coarse fallback.
 - Let the learner skip ahead or jump around if they want — this is pacing assistance, not a

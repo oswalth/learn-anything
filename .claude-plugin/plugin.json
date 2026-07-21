@@ -1,7 +1,7 @@
 {
   "name": "learn-anything",
-  "version": "0.13.0",
-  "description": "AI-assisted self-learning for senior engineers: advise-level depth, mandatory origins/evolution context, challenge-based practice, and in-repo spaced-repetition retention. Scaffolds content-only topic repos and drives them through kickoff -> gated roadmap -> plan -> author -> learn -> check -> quiz -> recall, with a guarded self-evolution workflow.",
+  "version": "1.0.0",
+  "description": "AI-assisted self-learning for senior engineers: advise-level depth, challenge-based practice, spaced-repetition retention, and lean one-pass generation workflows.",
   "author": {
     "name": "oswalth"
   },

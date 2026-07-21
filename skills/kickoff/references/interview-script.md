@@ -108,21 +108,19 @@ or "no capstone — <why>".
 
 → Write: `BASELINE.md` table.
 
-## Phase 8 — Roadmap generation (D12)
+## Phase 8 — Roadmap generation
 
-25. Spawn **two `roadmap-drafter` agents in parallel** (Agent tool, both in one message) with
-    identical inputs: the `CLAUDE.md` draft, the prior-art verdict, and the **conventions
-    text inlined** — read it yourself from `${CLAUDE_PLUGIN_ROOT}/skills/conventions/SKILL.md`
-    (fallback `${CLAUDE_SKILL_DIR}/../conventions/SKILL.md`); the agents can't open
+25. Spawn **one `roadmap-drafter` agent** with the `CLAUDE.md` draft, the prior-art verdict,
+    and the **conventions
+    text inlined** — read [the conventions](../../conventions/SKILL.md); the agents can't open
     plugin-internal files by relative path from the topic-repo cwd.
-26. Run **`roadmap-judge`** once on the two drafts to merge into the final `roadmap.md`.
-27. Write `roadmap.md` from `assets/roadmap.md`, **every module `status: draft`**.
+26. Write the result to `roadmap.md` using `assets/roadmap.md`, **every module `status: draft`**.
 
 ## Phase 9 — HARD STOP + approval (D8)
 
-28. Present the roadmap. Ask for changes. Iterate (regenerating `roadmap.md`) until the
+27. Present the roadmap. Ask for changes. Apply requested changes directly until the
     learner says, unambiguously, that they approve it.
-29. On approval only: flip module statuses `draft → approved`, scaffold `modules/README.md`
+28. On approval only: flip module statuses `draft → approved`, scaffold `modules/README.md`
     (the **module**-status board — module vocabulary `draft → approved → planned →
     in-progress → done`), `retention/deck/` + `retention/log.md`, `workspace/`; add a
     changelog entry to

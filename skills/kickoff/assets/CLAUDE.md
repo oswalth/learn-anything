@@ -64,12 +64,12 @@ Teach the new by contrast with what I already know deeply:
 - **Minimum version:** {{X.Y.Z}} — the plugin version this topic was created against;
   `/author` and `/plan-module` warn if the installed plugin is older.
 - This repo is content-only. The plugin supplies all skills, agents, and conventions.
-- **To restore on another machine** (install the plugin, then open this directory):
-  ```text
-  /plugin marketplace add oswalth/learn-anything
-  /plugin install learn-anything@learn-anything
-  ```
-  Update later with `/plugin marketplace update learn-anything` then re-install.
+- **Restore with Claude Code:** add marketplace `oswalth/learn-anything`, then install
+  `learn-anything@learn-anything` with `/plugin`.
+- **Restore with Codex:** add marketplace `oswalth/learn-anything`, then add
+  `learn-anything@learn-anything` with `codex plugin`.
+- **Restore with Copilot CLI:** add marketplace `oswalth/learn-anything`, then install
+  `learn-anything@learn-anything` with `copilot plugin`.
 
 ## Decisions
 

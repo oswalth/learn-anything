@@ -4,8 +4,7 @@ description: >-
   On-demand, bounded fix for ONE flagged claim in an already-generated section — applied
   immediately during study, without waiting for a full /author regeneration. Use when the
   learner flags a specific line as wrong or outdated, or asks for more depth on one concept,
-  mid-mentoring or mid-study. Verifies the edit with the matching critic (accuracy for wrong
-  claims, freshness for outdated facts, depth for thin coverage) before finishing. Mutates
+  mid-mentoring or mid-study. Makes one direct, scoped edit with no review loop. Mutates
   section content, so it is user-invoked only: /patch N.K "what's wrong or what needs more
   depth".
 disable-model-invocation: false
@@ -15,13 +14,11 @@ argument-hint: "N.K \"note describing the correction or depth request\""
 # /patch N.K — bounded, on-demand section correction
 
 Fix or deepen ONE flagged claim/concept in an already-generated section, right now, without
-re-running the full drafter + 4-critic quorum. This is a scalpel: touch only what the learner
-flagged, verify with one matching critic, stop.
+regenerating the section. Touch only what the learner flagged, then stop.
 
 ## When to use vs `/author`
 - One wrong or outdated claim, or one concept that's thin on depth → `/patch`.
-- Multiple issues, a section that needs re-planning, or the section should re-earn all four
-  critics' blessing → re-run `/author N.K` instead (regenerates through the full quorum).
+- Multiple issues or a section that needs re-planning → re-run `/author N.K` instead.
 
 ## Argument handling
 - Missing `N.K` or note → ask which section and what's wrong or thin.
@@ -35,8 +32,7 @@ flagged, verify with one matching critic, stop.
   them.
 - Topic `CLAUDE.md` (adjacent-expertise contrasts, so the fix stays consistent in voice) and,
   for outdated-fact flags, `BASELINE.md`.
-- The conventions, inlined from `${CLAUDE_PLUGIN_ROOT}/skills/conventions/SKILL.md` (fallback
-  `${CLAUDE_SKILL_DIR}/../conventions/SKILL.md`) — apply only the clause the flag needs (the
+- The [conventions](../conventions/SKILL.md) — apply only the clause the flag needs (the
   depth standard §1 for a depth request; the "as of `<date>`" freshness phrasing §6 for a
   staleness flag).
 
@@ -65,27 +61,9 @@ Never touch unrelated claims, restructure headings, or expand past the flag. If 
 reveals the section needs broader rework, stop, say why, and point to `/author N.K` instead of
 improvising a bigger edit.
 
-## Step 3 — verify with the matching critic
-Invoke (Agent tool) exactly the critic matching the classification, giving it the section
-directory path and an explicit note that this is a **`/patch` verification pass**, scoping it
-to the edited passage (quote it):
-- **wrong** → `critic-accuracy`
-- **outdated** → `critic-freshness`
-- **thin** → `critic-depth`
-
-Tell the critic it may still surface other things it notices in the file, but that only
-objections about the edited passage itself block the patch — everything else is FYI, surfaced
-to the learner, never auto-applied (that would break bounded scope).
-
-- If the critic objects to the edited passage, revise once more and re-verify — **max 2
-  rounds** (this is a scalpel, not the full revise loop). If still failing after 2 rounds,
-  leave the file as it was before Step 2, tell the learner exactly what's unresolved, and
-  suggest `/author N.K`.
-- Otherwise, the patch stands.
-
-## Step 4 — report, no status change
-Tell the learner what changed (quote before/after), which critic verified it, and any
-unprompted extra objections the critic surfaced (for awareness, not acted on).
+## Step 3 — report, no status change
+Tell the learner what changed and quote the relevant before/after text. Do not perform a
+second pass. If the correction requires broader confidence, point to `/author N.K`.
 
 **Never** change section or module status (`studied`/`done` are untouched — a patch doesn't
 re-certify mastery; `/check` alone owns those transitions) and never write to `workspace/` or

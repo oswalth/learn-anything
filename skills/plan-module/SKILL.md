@@ -18,10 +18,9 @@ NOT write any `theory.md`/`practice.md`/etc.
 
 ## Preconditions (check, then stop if unmet)
 - **Plugin compatibility (soft).** Read the topic `CLAUDE.md`'s recorded **Minimum version**
-  and compare it to the installed plugin version in
-  `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`. If the installed plugin is **older** than
-  the topic's recorded minimum, WARN the learner (this topic expects newer plugin machinery;
-  suggest updating via `/plugin`) and ask whether to proceed. This is a warning, not a block.
+  and compare it to the active tool's plugin manifest. If the installed plugin is **older**
+  than the topic's recorded minimum, WARN the learner, suggest updating through the active
+  tool's plugin manager, and ask whether to proceed. This is a warning, not a block.
 - `N` is provided (`$ARGUMENTS` / `$0`). If not, ask which module.
 - Read `roadmap.md`. Find module N. **If its module status is not `approved`** (i.e. still
   `draft`, or already `planned`/`in-progress`/`done`), refuse:

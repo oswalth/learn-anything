@@ -35,7 +35,7 @@ Ask, one at a time, adapting to the topic:
   modules), process-mix change, capstone change, or a **per-topic override** (a project-level
   `.claude/skills/<name>/SKILL.md` or `.claude/agents/<name>.md` in this repo that shadows the
   plugin's, for a topic-specific behavior).
-- **Plugin-level** — a change to a convention, a command's default behavior, or a critic that
+- **Plugin-level** — a change to a convention, a command's default behavior, or an agent that
   would help *every* topic, not just this one.
 
 ## Apply topic-level changes (here)
@@ -51,7 +51,7 @@ For each plugin-level idea, emit a **ready-to-paste `/evolve` brief**:
 /evolve
 Goal: <what should change and why, in the learner's terms>
 Motivation: <the concrete pain from this topic that prompted it>
-Suspected scope: <which convention/command/critic seems involved — a guess, /evolve confirms>
+Suspected scope: <which convention/command/agent seems involved — a guess, /evolve confirms>
 Originating topic: <this topic's name/path>
 ```
 Tell the learner to run it from the plugin checkout. Do not edit the plugin from here — a

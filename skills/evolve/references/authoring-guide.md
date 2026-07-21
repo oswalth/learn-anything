@@ -50,18 +50,15 @@ argument-hint: "N.K | N"          # optional UI hint for expected args
   demand rather than paying for them every invocation.
 - **One skill = one job.** Don't fold two commands together. Shared knowledge lives in
   `skills/conventions/` and is *referenced*, never copy-pasted into multiple skills.
-- Reference sibling files with a relative path (`references/foo.md`); use
-  `${CLAUDE_SKILL_DIR}` if you need an absolute path in an executed command.
+- Reference sibling files with a relative Markdown link (`references/foo.md`). Relative links
+  work across Claude, Codex, and Copilot packaging.
 
 ## Locating plugin-internal files (skills vs. agents)
 A command's cwd is the **topic repo**, and a subagent's cwd is the topic repo too — neither
 points into the installed plugin, so a bare relative path like `skills/conventions/SKILL.md`
 does not resolve. Distinguish the two consumers:
-- **Skills** read plugin-internal siblings by **absolute path**: prefer
-  `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` (the documented absolute path to the plugin's
-  install dir), with `${CLAUDE_SKILL_DIR}/../<name>/SKILL.md` as a fallback (a skill's own dir
-  is absolute, and sibling skills like `conventions/` sit one level up). This is how the
-  orchestrator loads `conventions/SKILL.md`.
+- **Skills** link plugin-internal siblings relatively, for example
+  `[conventions](../../conventions/SKILL.md)`. Do not depend on a tool-specific plugin-root token.
 - **Agents** never open plugin files by path. The orchestrating skill reads the shared
   knowledge and **inlines its text into each agent's prompt**; agents treat that inlined text
   as the normative source. Do not instruct an agent to "read `skills/conventions/SKILL.md`" —
@@ -73,33 +70,24 @@ does not resolve. Distinguish the two consumers:
 name: <kebab-case>
 description: <what it specializes in and when it's invoked>
 tools: Read, WebSearch, WebFetch   # optional — least privilege; add Bash only if it must run code
-model: sonnet                      # optional — see "Model tier discipline" below
+model: sonnet                      # optional; use the cheapest tier reliable for the task
 ---
 <concise system prompt: role, inputs it will be given, what to produce, output format>
 ```
 - Keep agents **concise and maintainable — more lines ≠ better instructions.** State the role,
   the inputs the orchestrator will pass, the exact output contract, and the quality bar
   (defer to `skills/conventions/SKILL.md` rather than restating it).
-- Least-privilege tools: critics that only read get `Read` (+ web for freshness); only
-  `critic-accuracy` gets `Bash`, because it executes code samples.
+- Use least-privilege tools: reading gets `Read`, current facts get web tools, and code
+  execution gets `Bash` only when required.
 - Plugin-shipped agents may **not** define `hooks`, `mcpServers`, or `permissionMode`, and the
   only valid `isolation` value is `worktree`.
-- **Model tier discipline.** Default new agents to the **cheapest tier that reliably does the
-  job**; pin a pricier tier only with a stated reason. Rubric/criteria-matching tasks (the four
-  critics: checking a section against an explicit checklist) default to `sonnet` — this is a
-  verification task, not open-ended synthesis, and it is also the **highest-frequency** call
-  in the plugin (up to ~12–16 critic calls per section across revise rounds), so its tier
-  choice dominates aggregate cost. `section-drafter` stays on `opus`: it is the actual content
-  generator (the learner's product), runs far less often per section than the critics, and a
-  weaker draft can *increase* total cost by triggering more revise rounds — the tradeoff cuts
-  the other way there. When a command needs to trade rigor for cost on a specific invocation
-  (see `/author`'s `model=`/`iterations=` args), make that an explicit, learner-visible
-  override with a stated default — never a silent, invocation-varying choice.
+- Default new agents to the cheapest tier that reliably does the job; pin a pricier tier only
+  with a stated reason. Keep workflows single pass unless the learner explicitly reruns them.
 
 ## Conventions changes are special
 The depth standard, practice philosophy, evolution-lens rule, session sizing, and changelog
 discipline live **once** in `skills/conventions/SKILL.md`. Changing them is high blast-radius:
-every drafter, critic, and validator defers to that file. When `/evolve` touches conventions,
+every drafter and validator defers to that file. When `/evolve` touches conventions,
 the impact check must enumerate every consumer, and the change is almost always at least a
 **minor** bump (a **major** bump if it changes the *format* of files in existing topic repos).
 
@@ -115,7 +103,7 @@ the impact check must enumerate every consumer, and the change is almost always 
   backstop, and the plugin mandates them as the first practice exercise.
 
 ## Versioning reminder (mirror in the changelog)
-- **major** — breaking format change to topic-repo files → include a migration note.
+- **major** — breaking command, packaging, or topic-repo format change → include a migration note.
 - **minor** — new command or new behavior.
 - **patch** — a fix.
 Every `/evolve` change ends with a `plugin.json` bump **and** a `CHANGELOG.md` entry

@@ -1,6 +1,6 @@
 {
   "name": "learn-anything",
-  "version": "0.13.0",
+  "version": "1.0.0",
   "description": "AI-assisted self-learning for senior engineers: advise-level depth, mandatory origins/evolution context, challenge-based practice, and in-repo spaced-repetition retention.",
   "author": {
     "name": "oswalth",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "learn-anything",
     "shortDescription": "Build and run deep, challenge-based self-learning topic repos.",
-    "longDescription": "A Codex-compatible learning system for senior engineers who want advise-level depth, roadmap-driven study, challenge-based practice, freshness checks, and spaced-repetition retention. The plugin can scaffold thin topic repos, plan modules, author sections, review work, quiz, recall, checkpoint, and evolve its own conventions.",
+    "longDescription": "A lean learning system for senior engineers who want advise-level depth, roadmap-driven study, challenge-based practice, freshness checks, and spaced-repetition retention.",
     "developerName": "oswalth",
     "category": "Education",
     "capabilities": [
